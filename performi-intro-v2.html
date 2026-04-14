@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performi — 從 Excel 到智慧 KPI 管理</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    /* ── Hero ─────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, #0077a8 0%, #00a896 60%, #22c55e 100%);
+      color: white;
+      padding: 90px 40px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 20%, rgba(255,255,255,0.08) 0%, transparent 60%);
+    }
+    .hero-icon { font-size: 5rem; margin-bottom: 20px; }
+    .hero-eyebrow {
+      font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase;
+      opacity: 0.75; margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900; line-height: 1.15; letter-spacing: -1px;
+    }
+    .hero h1 em { font-style: normal; opacity: 0.65; }
+    .hero-sub {
+      font-size: 1.1rem; opacity: 0.88; margin-top: 16px; line-height: 1.7;
+    }
+    .hero-badges {
+      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 28px;
+    }
+    .badge {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 999px; padding: 5px 16px;
+      font-size: 0.8rem; letter-spacing: 0.5px;
+    }
+
+    /* ── Section wrapper ──────────────────────────────── */
+    .section { padding: 72px 20px; max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: #0077a8;
+      background: #e0f2fe; border-radius: 999px;
+      padding: 4px 14px; margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800; color: #1e293b; margin-bottom: 10px; line-height: 1.2;
+    }
+    .section-lead {
+      font-size: 1rem; color: #64748b; line-height: 1.8; margin-bottom: 36px;
+    }
+    .divider { border: none; border-top: 2px solid #e2e8f0; margin: 0; }
+
+    /* ── Pain points ──────────────────────────────────── */
+    .pain-section { background: #fff7ed; }
+    .pain-inner { max-width: 1100px; margin: 0 auto; padding: 72px 20px; }
+    .pain-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px;
+    }
+    .pain-card {
+      background: white; border-radius: 16px; padding: 28px 24px;
+      border-top: 4px solid #f97316;
+      box-shadow: 0 4px 20px rgba(249,115,22,0.08);
+    }
+    .pain-card .pi { font-size: 2.2rem; margin-bottom: 14px; }
+    .pain-card h3 { font-size: 1rem; font-weight: 700; color: #c2410c; margin-bottom: 8px; }
+    .pain-card p  { font-size: 0.87rem; color: #78716c; line-height: 1.65; }
+
+    /* ── Overview numbers ─────────────────────────────── */
+    .overview-section { background: linear-gradient(135deg, #0077a8, #00a896); }
+    .overview-inner { max-width: 1100px; margin: 0 auto; padding: 72px 20px; text-align: center; }
+    .overview-inner .section-tag { background: rgba(255,255,255,0.2); color: white; }
+    .overview-inner .section-title { color: white; }
+    .overview-inner .section-lead { color: rgba(255,255,255,0.8); }
+    .overview-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px;
+    }
+    .overview-card {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px; padding: 28px 16px; text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .overview-card .oc-icon { font-size: 2rem; margin-bottom: 10px; }
+    .overview-card .oc-num  { font-size: 2.6rem; font-weight: 900; color: white; line-height: 1; }
+    .overview-card .oc-label { font-size: 0.88rem; color: rgba(255,255,255,0.78); margin-top: 6px; }
+
+    /* ── Metrics ──────────────────────────────────────── */
+    .metrics-section { background: #f0fdf4; }
+    .metrics-inner { max-width: 1100px; margin: 0 auto; padding: 72px 20px; }
+    .metrics-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;
+    }
+    .metric-card {
+      background: white; border-radius: 16px; padding: 30px 20px; text-align: center;
+      box-shadow: 0 4px 20px rgba(34,197,94,0.10);
+      border-bottom: 4px solid #22c55e;
+    }
+    .metric-card .mc-num {
+      font-size: 3rem; font-weight: 900; color: #0077a8; line-height: 1;
+    }
+    .metric-card .mc-unit { font-size: 1rem; font-weight: 700; color: #00a896; }
+    .metric-card .mc-label {
+      font-size: 0.88rem; color: #64748b; margin-top: 10px; line-height: 1.5;
+    }
+
+    /* ── Comparison ───────────────────────────────────── */
+    .compare-section { background: white; }
+    .compare-inner { max-width: 1100px; margin: 0 auto; padding: 72px 20px; }
+    .compare-wrap {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: start;
+    }
+    @media (max-width: 700px) {
+      .compare-wrap { grid-template-columns: 1fr; }
+      .compare-arrow { transform: rotate(90deg); margin: 12px 0; }
+    }
+    .compare-col {
+      border-radius: 20px; padding: 28px 24px;
+    }
+    .compare-col.old {
+      background: #fff8f1; border: 2px solid #fed7aa;
+    }
+    .compare-col.new {
+      background: #f0fdf4; border: 2px solid #bbf7d0;
+    }
+    .compare-col .cc-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 22px; font-weight: 800; font-size: 1rem;
+    }
+    .compare-col.old .cc-header { color: #9a3412; }
+    .compare-col.new .cc-header { color: #14532d; }
+    .compare-steps { display: flex; flex-direction: column; gap: 10px; }
+    .compare-step {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: white; border-radius: 10px; padding: 12px 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .compare-step .cs-num {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 800;
+    }
+    .compare-col.old .cs-num { background: #fed7aa; color: #9a3412; }
+    .compare-col.new .cs-num { background: #bbf7d0; color: #14532d; }
+    .compare-step .cs-text { font-size: 0.88rem; color: #475569; line-height: 1.5; }
+    .compare-step .cs-sub  { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
+    .compare-footer {
+      margin-top: 18px; text-align: center; padding: 10px;
+      border-radius: 10px; font-size: 0.85rem; font-weight: 700;
+    }
+    .compare-col.old .compare-footer { background: #fed7aa; color: #9a3412; }
+    .compare-col.new .compare-footer { background: #bbf7d0; color: #14532d; }
+    .compare-arrow {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; color: #0077a8; padding: 0 16px; padding-top: 80px;
+    }
+
+    /* ── Features ─────────────────────────────────────── */
+    .feature-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px;
+    }
+    .feature-card {
+      background: white; border-radius: 16px; padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,119,168,0.07);
+      border-left: 4px solid transparent;
+      display: flex; gap: 16px;
+    }
+    .feature-card.c1 { border-color: #0077a8; }
+    .feature-card.c2 { border-color: #00a896; }
+    .feature-card.c3 { border-color: #22c55e; }
+    .feature-card.c4 { border-color: #a855f7; }
+    .fc-icon {
+      font-size: 1.8rem; min-width: 46px; height: 46px;
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    }
+    .c1 .fc-icon { background: #e0f2fe; }
+    .c2 .fc-icon { background: #ccfbf1; }
+    .c3 .fc-icon { background: #dcfce7; }
+    .c4 .fc-icon { background: #f3e8ff; }
+    .feature-card h3 { font-size: 0.97rem; font-weight: 700; color: #1e293b; margin-bottom: 5px; }
+    .feature-card p  { font-size: 0.85rem; color: #64748b; line-height: 1.6; }
+
+    /* ── Roles ────────────────────────────────────────── */
+    .roles-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+    }
+    .role-card {
+      background: white; border-radius: 16px; padding: 26px;
+      box-shadow: 0 4px 16px rgba(0,119,168,0.07);
+    }
+    .role-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .role-badge {
+      padding: 4px 12px; border-radius: 999px; font-size: 0.75rem; font-weight: 700;
+    }
+    .rb-admin   { background: #fce7f3; color: #9d174d; }
+    .rb-manager { background: #e0f2fe; color: #0c4a6e; }
+    .rb-member  { background: #dcfce7; color: #14532d; }
+    .role-card h3 { font-size: 1rem; font-weight: 700; }
+    .role-card ul { list-style: none; }
+    .role-card ul li {
+      padding: 7px 0; border-bottom: 1px solid #f1f5f9;
+      font-size: 0.87rem; color: #475569;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .role-card ul li:last-child { border-bottom: none; }
+    .role-card ul li::before { content: '✓'; color: #22c55e; font-weight: 800; }
+
+    /* ── CTA ──────────────────────────────────────────── */
+    .cta-section {
+      background: linear-gradient(135deg, #0077a8, #00a896);
+      text-align: center; padding: 80px 20px;
+    }
+    .cta-section h2 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 900; color: white; margin-bottom: 14px;
+    }
+    .cta-section p { font-size: 1rem; color: rgba(255,255,255,0.85); margin-bottom: 32px; }
+    .cta-badge-row {
+      display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+    }
+    .cta-badge {
+      background: rgba(255,255,255,0.18);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      border-radius: 999px; padding: 8px 22px;
+      font-size: 0.9rem; font-weight: 700; color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ① Hero -->
+<header class="hero">
+  <div class="hero-icon">📊</div>
+  <div class="hero-eyebrow">Zerova Technologies · KPI 績效管理</div>
+  <h1><em>從 Excel 到</em> Performi</h1>
+  <p class="hero-sub">
+    告別每月手動建檔、Email 往返、人工排名的繁瑣循環<br>
+    讓 Performi 把這一切自動化，讓你專注在真正重要的事
+  </p>
+  <div class="hero-badges">
+    <span class="badge">v2.0.0 · 2025 年版</span>
+    <span class="badge">🏭 3 大廠區</span>
+    <span class="badge">🌐 繁中 · EN · Việt</span>
+  </div>
+</header>
+
+<!-- ② Excel 時代的挑戰 -->
+<div class="pain-section">
+  <div class="pain-inner">
+    <div class="section-tag">⚠️ 過去的困境</div>
+    <h2 class="section-title">Excel 時代，每個月都在重複同樣的痛</h2>
+    <p class="section-lead">你是否也曾每月花好幾天做這些事？</p>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pi">📁</div>
+        <h3>每人一份 Excel</h3>
+        <p>為每位員工手動建立、維護、命名 KPI 試算表，版本管理混亂，容易出錯。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pi">📧</div>
+        <h3>Email 附件往返送審</h3>
+        <p>填完 Excel 後以 Email 寄給主管，主管回覆後再彙整，流程繁瑣且難以追蹤狀態。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pi">🧮</div>
+        <h3>人工計算排名</h3>
+        <p>審核通過後還要手動整理所有人的分數，逐一計算排名，費時且容易錯漏。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pi">🔁</div>
+        <h3>每月重複同樣動作</h3>
+        <p>下個月再從頭來一遍。跨廠區更是難以統一格式，溝通成本極高。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ③ Performi 登場 -->
+<div class="overview-section">
+  <div class="overview-inner">
+    <div class="section-tag">🚀 解決方案</div>
+    <h2 class="section-title">Performi 登場</h2>
+    <p class="section-lead">
+      專為 Zerova Technologies 設計的企業級 KPI 績效管理平台<br>
+      從填報、審核、到排行榜，全部數位化、自動化
+    </p>
+    <div class="overview-grid">
+      <div class="overview-card">
+        <div class="oc-icon">🏭</div>
+        <div class="oc-num">3</div>
+        <div class="oc-label">涵蓋廠區</div>
+      </div>
+      <div class="overview-card">
+        <div class="oc-icon">🌐</div>
+        <div class="oc-num">3</div>
+        <div class="oc-label">支援語言</div>
+      </div>
+      <div class="overview-card">
+        <div class="oc-icon">📋</div>
+        <div class="oc-num">4</div>
+        <div class="oc-label">KPI 類別</div>
+      </div>
+      <div class="overview-card">
+        <div class="oc-icon">🔐</div>
+        <div class="oc-num">3</div>
+        <div class="oc-label">使用者角色</div>
+      </div>
+      <div class="overview-card">
+        <div class="oc-icon">⚙️</div>
+        <div class="oc-num">2</div>
+        <div class="oc-label">審核層級</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 效率提升成效 -->
+<div class="metrics-section">
+  <div class="metrics-inner">
+    <div class="section-tag">📈 效率提升</div>
+    <h2 class="section-title">數字說話</h2>
+    <p class="section-lead">導入 Performi 後，每月 KPI 管理作業的質變</p>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="mc-num">↓80<span class="mc-unit">%</span></div>
+        <div class="mc-label">每月 KPI 行政作業時間<br>大幅縮短</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-num">0<span class="mc-unit">次</span></div>
+        <div class="mc-label">需要手動計算排名<br>系統全自動產生</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-num">↑3<span class="mc-unit">x</span></div>
+        <div class="mc-label">審核速度提升<br>系統通知取代 Email</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-num">即時</div>
+        <div class="mc-label">送審後主管立即收到通知<br>不再等待回信</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ⑤ 流程前後對比 -->
+<div class="compare-section">
+  <div class="compare-inner">
+    <div class="section-tag">🔄 流程對比</div>
+    <h2 class="section-title">每月 KPI 流程，前後差多少？</h2>
+    <p class="section-lead">同樣的目標，完全不同的體驗</p>
+    <div class="compare-wrap">
+      <!-- 舊流程 -->
+      <div class="compare-col old">
+        <div class="cc-header">
+          <span style="font-size:1.6rem;">📊</span>
+          <span>Excel 舊流程</span>
+        </div>
+        <div class="compare-steps">
+          <div class="compare-step">
+            <div class="cs-num">1</div>
+            <div>
+              <div class="cs-text">手動建立每人 Excel 試算表</div>
+              <div class="cs-sub">版本管理困難，命名各自為政</div>
+            </div>
+          </div>
+          <div class="compare-step">
+            <div class="cs-num">2</div>
+            <div>
+              <div class="cs-text">員工填寫後以 Email 附件送審</div>
+              <div class="cs-sub">無法即時追蹤誰送了、誰還沒</div>
+            </div>
+          </div>
+          <div class="compare-step">
+            <div class="cs-num">3</div>
+            <div>
+              <div class="cs-text">等待主管回覆確認</div>
+              <div class="cs-sub">Email 往返，審核狀態不透明</div>
+            </div>
+          </div>
+          <div class="compare-step">
+            <div class="cs-num">4</div>
+            <div>
+              <div class="cs-text">彙整所有人的分數</div>
+              <div class="cs-sub">手動複製貼上，容易出錯</div>
+            </div>
+          </div>
+          <div class="compare-step">
+            <div class="cs-num">5</div>
+            <div>
+              <div class="cs-text">人工計算排名並通知員工</div>
+              <div class="cs-sub">耗時費力，下個月再重來一次</div>
+            </div>
+          </div>
+        </div>
+        <div class="compare-footer">⏱ 約需 3–5 個工作天</div>
+      </div>
+
+      <!-- 箭頭 -->
+      <div class="compare-arrow">→</div>
+
+      <!-- 新流程 -->
+      <div class="compare-col new">
+        <div class="cc-header">
+          <span style="font-size:1.6rem;">⚡</span>
+          <span>Performi 新流程</span>
+        </div>
+        <div class="compare-steps">
+          <div class="compare-step">
+            <div class="cs-num">1</div>
+            <div>
+              <div class="cs-text">登入系統，線上填寫 KPI 數據</div>
+              <div class="cs-sub">系統自動計算加權分數，支援草稿暫存</div>
+            </div>
+          </div>
+          <div class="compare-step">
+            <div class="cs-num">2</div>
+            <div>
+              <div class="cs-text">一鍵整月送審提交</div>
+              <div class="cs-sub">送審狀態即時顯示，不再靠 Email 確認</div>
+            </div>
+          </div>
+          <div class="compare-step">
+            <div class="cs-num">3</div>
+            <div>
+              <div class="cs-text">系統自動通知 L1 主管初審</div>
+              <div class="cs-sub">主管在審核中心一覽待審清單</div>
+            </div>
+          </div>
+          <div class="compare-step">
+            <div class="cs-num">4</div>
+            <div>
+              <div class="cs-text">L2 主管終審核准</div>
+              <div class="cs-sub">兩階段流程全程可追蹤，可退回修改</div>
+            </div>
+          </div>
+          <div class="compare-step">
+            <div class="cs-num">5</div>
+            <div>
+              <div class="cs-text">排行榜自動更新，員工即時查看</div>
+              <div class="cs-sub">英雄榜即時反映，激勵持續成長</div>
+            </div>
+          </div>
+        </div>
+        <div class="compare-footer">✅ 即時完成，全程系統處理</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ⑥ 核心功能模組 -->
+<div style="background:#f8fafc;">
+  <div class="section">
+    <div class="section-tag">⚡ 核心功能</div>
+    <h2 class="section-title">8 大功能模組，管理閉環一站搞定</h2>
+    <p class="section-lead">從填報到分析，Performi 覆蓋完整 KPI 管理生命週期</p>
+    <div class="feature-grid">
+      <div class="feature-card c1">
+        <div class="fc-icon">📊</div>
+        <div>
+          <h3>儀表板 Dashboard</h3>
+          <p>個人績效總覽、團隊視角切換、月度趨勢圖、即時通知，一目了然掌握全局。</p>
+        </div>
+      </div>
+      <div class="feature-card c2">
+        <div class="fc-icon">✍️</div>
+        <div>
+          <h3>數據填報</h3>
+          <p>逐項填寫 KPI 實際值，系統自動計算加權分數，支援草稿暫存與整月批量送審。</p>
+        </div>
+      </div>
+      <div class="feature-card c3">
+        <div class="fc-icon">🗂️</div>
+        <div>
+          <h3>審核中心</h3>
+          <p>主管進行月報審核與半年評比，兩階段審核流程，支援核准／退回操作。</p>
+        </div>
+      </div>
+      <div class="feature-card c4">
+        <div class="fc-icon">🏆</div>
+        <div>
+          <h3>英雄榜排行</h3>
+          <p>依部門或寶典專案統計年度績效排名，激勵員工持續成長與貢獻。</p>
+        </div>
+      </div>
+      <div class="feature-card c1">
+        <div class="fc-icon">📚</div>
+        <div>
+          <h3>寶典資料庫</h3>
+          <p>知識文件集中管理，員工可上傳 PPT 等資料，供全團隊瀏覽學習。</p>
+        </div>
+      </div>
+      <div class="feature-card c2">
+        <div class="fc-icon">🏭</div>
+        <div>
+          <h3>生產效能分析</h3>
+          <p>追蹤各廠區 UPPH 指標、DL／IDL 人力配置，支援預估產能規劃與目標管理。</p>
+        </div>
+      </div>
+      <div class="feature-card c3">
+        <div class="fc-icon">👥</div>
+        <div>
+          <h3>團隊組織管理</h3>
+          <p>管理員配置主管─成員層級關係，組織架構圖可視化，同步快取確保數據一致。</p>
+        </div>
+      </div>
+      <div class="feature-card c4">
+        <div class="fc-icon">📈</div>
+        <div>
+          <h3>流動率分析</h3>
+          <p>月度離職率、流動率、人數趨勢圖表，匯出 Excel 明細，掌握人才異動動態。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ⑦ 使用者角色 -->
+<div style="background:white;">
+  <div class="section">
+    <div class="section-tag">👤 使用者角色</div>
+    <h2 class="section-title">三種角色，各司其職</h2>
+    <p class="section-lead">依據職位給予對應的功能權限，清晰無混亂</p>
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-header">
+          <span style="font-size:2rem;">👑</span>
+          <div>
+            <div class="role-badge rb-admin">管理員 Admin</div>
+            <h3 style="margin-top:4px;">系統管理者</h3>
+          </div>
+        </div>
+        <ul>
+          <li>管理全部 KPI 項目與設定</li>
+          <li>配置組織結構與部門</li>
+          <li>批量匯入 KPI 數據</li>
+          <li>管理頁面存取權限</li>
+          <li>發送系統通知訊息</li>
+          <li>更新英雄榜排行資料</li>
+          <li>查看所有廠區數據</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <span style="font-size:2rem;">🧑‍💼</span>
+          <div>
+            <div class="role-badge rb-manager">管理職 Manager</div>
+            <h3 style="margin-top:4px;">主管 / 督導</h3>
+          </div>
+        </div>
+        <ul>
+          <li>審核團隊成員月報</li>
+          <li>進行半年評比評分</li>
+          <li>配置個人 KPI 項目</li>
+          <li>管理團隊成員組成</li>
+          <li>查看團隊績效儀表板</li>
+          <li>流動率趨勢分析</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <span style="font-size:2rem;">🧑‍🔬</span>
+          <div>
+            <div class="role-badge rb-member">一般員工 Member</div>
+            <h3 style="margin-top:4px;">一般使用者</h3>
+          </div>
+        </div>
+        <ul>
+          <li>填寫個人 KPI 數據</li>
+          <li>查看個人績效儀表板</li>
+          <li>瀏覽與上傳寶典文件</li>
+          <li>查看系統通知</li>
+          <li>查閱英雄榜排名</li>
+          <li>閱讀專業操作手冊</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑧ CTA -->
+<div class="cta-section">
+  <h2>準備好告別 Excel 了嗎？</h2>
+  <p>Performi 讓每個月的 KPI 管理，從繁瑣變成簡單</p>
+  <div class="cta-badge-row">
+    <span class="cta-badge">✅ 線上填報，即時審核</span>
+    <span class="cta-badge">🏆 排行榜自動更新</span>
+    <span class="cta-badge">🌐 三廠區統一管理</span>
+  </div>
+</div>
+
+</body>
+</html>
