@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>品保費用月報自動化平台 — 專案成果簡報</title>
+<style>
+:root {
+  --navy:    #0c0e2b;
+  --navy2:   #16193a;
+  --indigo:  #818cf8;
+  --violet:  #a78bfa;
+  --purple:  #c084fc;
+  --cyan:    #38bdf8;
+  --green:   #34d399;
+  --orange:  #fb923c;
+  --rose:    #fb7185;
+  --red:     #f87171;
+  --text:    #cbd5ff;
+  --muted:   #8b92c7;
+  --white:   #eef2ff;
+  --cb:      rgba(255,255,255,.04);
+  --cbr:     rgba(255,255,255,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--navy);color:var(--text);line-height:1.7;overflow-x:hidden}
+
+/* ── Nav ── */
+nav{position:fixed;top:0;width:100%;z-index:999;background:rgba(12,14,43,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--cbr);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-brand{font-size:14px;font-weight:700;background:linear-gradient(135deg,var(--indigo),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:12px;padding:6px 12px;border-radius:4px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white);background:rgba(167,139,250,.12)}
+
+/* ── Hero ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 24px 80px;background:radial-gradient(ellipse at 20% 50%,rgba(167,139,250,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 30%,rgba(99,102,241,.10) 0%,transparent 60%),var(--navy);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(167,139,250,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(167,139,250,.025) 1px,transparent 1px);background-size:64px 64px}
+.hero-badge{display:inline-block;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.35);color:var(--violet);padding:5px 18px;border-radius:20px;font-size:11px;letter-spacing:2.5px;font-weight:700;margin-bottom:24px;text-transform:uppercase}
+.hero h1{font-size:clamp(32px,6vw,68px);font-weight:700;color:var(--white);line-height:1.15;margin-bottom:20px;max-width:900px;position:relative}
+.hero h1 span{background:linear-gradient(135deg,var(--indigo),var(--violet),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:17px;color:var(--muted);max-width:620px;margin-bottom:40px;line-height:1.85}
+.live-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:52px}
+.live-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600}
+.live-violet{background:rgba(167,139,250,.10);border:1px solid rgba(167,139,250,.30);color:var(--violet)}
+.live-cyan{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.30);color:var(--cyan)}
+.live-green{background:rgba(52,211,153,.10);border:1px solid rgba(52,211,153,.30);color:var(--green)}
+.live-dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
+.hero-stats{display:flex;gap:52px;justify-content:center;flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-num{font-size:52px;font-weight:700;background:linear-gradient(135deg,var(--indigo),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;display:block}
+.stat-label{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+/* ── Section wrapper ── */
+.sec{padding:96px 24px;max-width:1160px;margin:0 auto}
+#tech{padding-bottom:52px}
+.sec-dark{background:var(--navy2);padding:96px 0}
+.sec-dark .sec{background:none}
+.sec-tag{display:block;color:var(--violet);font-size:11px;letter-spacing:3px;font-weight:700;text-transform:uppercase;margin-bottom:12px}
+.sec-title{font-size:clamp(22px,4vw,38px);font-weight:700;color:var(--white);margin-bottom:14px;line-height:1.3}
+.sec-desc{color:var(--muted);font-size:15px;max-width:620px;line-height:1.85;margin-bottom:44px}
+.divider{width:56px;height:3px;background:linear-gradient(90deg,var(--indigo),var(--purple));border-radius:2px;margin:18px 0}
+
+/* ── Cards ── */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.gcard{background:var(--cb);border:1px solid var(--cbr);border-radius:12px;padding:28px;transition:all .3s;position:relative;overflow:hidden}
+.gcard::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--violet),transparent);opacity:0;transition:opacity .3s}
+.gcard:hover{border-color:rgba(167,139,250,.30);transform:translateY(-4px);background:rgba(255,255,255,.06)}
+.gcard:hover::after{opacity:1}
+.card-icon{font-size:30px;margin-bottom:14px;display:block}
+.card-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:10px}
+.card-body{font-size:13px;color:var(--muted);line-height:1.75}
+
+/* ── Architecture flow ── */
+.arch-flow{display:flex;align-items:flex-start;gap:0;margin-top:40px;overflow-x:auto;padding-bottom:8px}
+.arch-step{flex:1;min-width:160px;display:flex;flex-direction:column;align-items:center;position:relative;padding:0 8px}
+.arch-step:not(:last-child)::after{content:'›';position:absolute;right:-10px;top:30px;font-size:26px;color:var(--violet);line-height:1}
+.arch-circle{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px;border:2px solid;flex-shrink:0}
+.ac1{border-color:var(--cyan);background:rgba(56,189,248,.10)}
+.ac2{border-color:var(--indigo);background:rgba(129,140,248,.10)}
+.ac3{border-color:var(--violet);background:rgba(167,139,250,.10)}
+.ac4{border-color:var(--purple);background:rgba(192,132,252,.10)}
+.ac5{border-color:var(--green);background:rgba(52,211,153,.10)}
+.arch-label{font-size:13px;font-weight:700;color:var(--white);text-align:center;margin-bottom:5px}
+.arch-sub{font-size:11px;color:var(--muted);text-align:center;line-height:1.5}
+
+/* ── Method cards ── */
+.layer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.lcard{border-radius:12px;padding:28px;border:1px solid;position:relative;overflow:hidden;transition:transform .3s}
+.lcard:hover{transform:translateY(-4px)}
+.lcard-l1{background:rgba(56,189,248,.05);border-color:rgba(56,189,248,.20);border-top:3px solid var(--cyan)}
+.lcard-l2{background:rgba(167,139,250,.05);border-color:rgba(167,139,250,.20);border-top:3px solid var(--violet)}
+.lcard-l3{background:rgba(192,132,252,.05);border-color:rgba(192,132,252,.20);border-top:3px solid var(--purple)}
+.lcard-bg{font-size:48px;font-weight:900;opacity:.07;position:absolute;top:8px;right:16px;line-height:1;color:var(--white);letter-spacing:-2px}
+.lbadge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:700;margin-bottom:12px;letter-spacing:.5px}
+.lb-cyan{background:rgba(56,189,248,.14);color:var(--cyan)}
+.lb-violet{background:rgba(167,139,250,.14);color:var(--violet)}
+.lb-purple{background:rgba(192,132,252,.14);color:var(--purple)}
+.lcard-title{font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px}
+.lcard-desc{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:16px}
+.lcard-tip{font-size:12px;color:var(--muted);padding:8px 12px;background:rgba(255,255,255,.03);border-radius:6px;border-left:3px solid}
+.lcard-l1 .lcard-tip{border-left-color:var(--cyan)}
+.lcard-l2 .lcard-tip{border-left-color:var(--violet)}
+.lcard-l3 .lcard-tip{border-left-color:var(--purple)}
+
+/* ── Coverage cards ── */
+.cov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px}
+.cov-card{background:var(--cb);border:1px solid var(--cbr);border-radius:12px;padding:22px 24px;transition:all .3s}
+.cov-card:hover{transform:translateY(-3px);border-color:rgba(167,139,250,.28)}
+.cov-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cov-num{font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--indigo),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;min-width:28px}
+.cov-name{font-size:14px;font-weight:700;color:var(--white)}
+.cov-body{font-size:12.5px;color:var(--muted);line-height:1.7}
+
+/* ── Insight cards ── */
+.ins-card{background:linear-gradient(135deg,rgba(167,139,250,.06),rgba(56,189,248,.04));border:1px solid rgba(167,139,250,.20);border-radius:14px;padding:26px 30px;margin-top:18px;position:relative}
+.ins-tag{display:inline-block;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:10px;background:rgba(192,132,252,.14);color:var(--purple)}
+.ins-title{font-size:17px;font-weight:700;color:var(--white);margin-bottom:10px;line-height:1.5}
+.ins-body{font-size:13.5px;color:var(--muted);line-height:1.85}
+.ins-body strong{color:var(--white)}
+.ins-quote{margin-top:14px;padding:10px 14px;background:rgba(255,255,255,.03);border-left:3px solid var(--violet);border-radius:0 6px 6px 0;font-size:12.5px;color:var(--text);font-style:italic}
+
+/* ── Tech cards ── */
+.tech-grid{display:flex;flex-wrap:wrap;gap:20px;margin-top:40px}
+.tech-card{width:calc(50% - 10px);box-sizing:border-box;background:var(--cb);border:1px solid var(--cbr);border-radius:12px;padding:28px;transition:all .3s}
+.tech-card:hover{border-color:rgba(167,139,250,.28);transform:translateY(-3px)}
+.tech-card h4{font-size:15px;font-weight:700;color:var(--white);margin-bottom:10px}
+.tech-card h4 span{color:var(--violet);margin-right:6px}
+.tech-card p{font-size:13px;color:var(--muted);line-height:1.75}
+
+/* ── Value cards ── */
+.val-card{text-align:center;padding:36px 24px;background:var(--cb);border:1px solid var(--cbr);border-radius:12px}
+.val-num{font-size:52px;font-weight:700;background:linear-gradient(135deg,var(--indigo),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;display:block;margin-bottom:10px}
+.val-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px}
+.val-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── Before/After ── */
+.ba-card{background:var(--cb);border:1px solid var(--cbr);border-radius:12px;padding:28px}
+.ba-label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-bottom:14px;display:block}
+.ba-list{list-style:none;font-size:13px;line-height:2.2}
+
+/* ── CTA ── */
+.cta{text-align:center;padding:112px 24px;background:radial-gradient(ellipse at center,rgba(167,139,250,.08) 0%,transparent 70%)}
+.cta .sec-title{margin:14px auto;max-width:560px}
+.cta .divider{margin:20px auto}
+.cta p{color:var(--muted);font-size:15px;max-width:520px;margin:0 auto 36px;line-height:1.85}
+.tag-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ctag{padding:5px 16px;border:1px solid rgba(167,139,250,.32);border-radius:20px;font-size:12px;color:var(--violet);background:rgba(167,139,250,.06)}
+
+/* ── Footer ── */
+footer{background:rgba(0,0,0,.35);border-top:1px solid var(--cbr);padding:24px;text-align:center;font-size:12px;color:var(--muted)}
+
+/* ── Plant tags ── */
+.plant-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.ptag{padding:4px 14px;border:1px solid rgba(167,139,250,.30);border-radius:20px;font-size:12px;color:var(--violet);background:rgba(167,139,250,.06)}
+
+/* ── Animations ── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:3px;font-family:"Courier New",monospace;font-size:12px;color:var(--violet)}
+.stack-flow{display:flex;align-items:center;flex-wrap:nowrap;overflow-x:auto;width:100%;background:rgba(255,255,255,.03);border:1px solid var(--cbr);border-radius:12px;padding:36px 32px;gap:0}
+.sflow-item{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:90px}
+.sflow-icon{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);flex-shrink:0}
+.sflow-name{font-size:13px;font-weight:700;color:var(--white);text-align:center;white-space:nowrap}
+.sflow-role{font-size:11px;color:var(--muted);text-align:center;white-space:nowrap}
+.sflow-arrow{font-size:22px;color:var(--violet);opacity:.45;flex-shrink:0;padding:0 4px;margin-bottom:22px;align-self:center}
+
+/* ── Verdict matrix ── */
+.vmx{background:rgba(255,255,255,.03);border:1px solid var(--cbr);border-radius:12px;overflow:hidden;margin-top:24px}
+.vmx-tbl{width:100%;border-collapse:collapse;font-size:13px}
+.vmx-tbl th{background:rgba(255,255,255,.05);color:var(--muted);padding:11px 16px;text-align:left;font-size:11px;letter-spacing:.5px;font-weight:600}
+.vmx-tbl td{padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text);vertical-align:top}
+.vmx-tbl tr:last-child td{border-bottom:none}
+.vmx-tbl tr:hover td{background:rgba(255,255,255,.02)}
+.vpill{display:inline-block;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700;white-space:nowrap}
+.vp-ok{background:rgba(52,211,153,.14);color:var(--green)}
+.vp-warn{background:rgba(248,113,113,.14);color:var(--red)}
+.vp-cau{background:rgba(251,146,60,.14);color:var(--orange)}
+.vp-info{background:rgba(192,132,252,.14);color:var(--purple)}
+
+@media(max-width:900px){
+  .grid3,.layer-grid,.grid4,.cov-grid{grid-template-columns:1fr}
+  .grid2{grid-template-columns:1fr}
+  .tech-grid .tech-card{width:100%}
+  nav{padding:0 16px}
+  .nav-links{display:none}
+  .arch-flow{flex-direction:column;align-items:center}
+  .arch-step:not(:last-child)::after{content:'↓';right:auto;top:auto;bottom:-16px;position:relative;display:block;text-align:center;margin:4px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="topnav">
+  <span class="nav-brand">QA Cost Intelligence</span>
+  <ul class="nav-links">
+    <li><a href="#challenge">挑戰</a></li>
+    <li><a href="#architecture">架構</a></li>
+    <li><a href="#method">分析方法</a></li>
+    <li><a href="#coverage">報告功能</a></li>
+    <li><a href="#insights">關鍵洞察</a></li>
+    <li><a href="#tech">技術亮點</a></li>
+    <li><a href="#value">導入效益</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <span class="hero-badge">Cost Intelligence Automation</span>
+  <h1>從 Excel 試算表<br>到<span> 智能費用月報</span></h1>
+  <p class="hero-sub">
+    將原本耗時兩天的人工費用彙整流程，重構為一套自動化的資料管線：
+    Excel 一存檔，互動式月報自動生成、智能洞察自動產生、預警郵件自動寄送。
+  </p>
+  <div class="live-row">
+    <span class="live-badge live-violet">
+      <span class="live-dot" style="background:var(--violet)"></span> Excel 變動即時觸發
+    </span>
+    <span class="live-badge live-cyan">
+      <span class="live-dot" style="background:var(--cyan)"></span> 五廠同步分析
+    </span>
+    <span class="live-badge live-green">
+      <span class="live-dot" style="background:var(--green)"></span> AI 智能摘要
+    </span>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num">5</span>
+      <div class="stat-label">QA 廠區涵蓋<br>GQA · DQA · ZTM · ZCM · PHV</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">27+</span>
+      <div class="stat-label">月歷史資料<br>2024/01 起滾動更新</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">10+</span>
+      <div class="stat-label">分析區塊<br>KPI · 趨勢 · 異常 · 預測</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">0</span>
+      <div class="stat-label">後端伺服器<br>純前端互動報告</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CHALLENGE ── -->
+<div class="sec-dark" id="challenge">
+  <div class="sec fade-up">
+    <span class="sec-tag">01 — Challenge</span>
+    <h2 class="sec-title">人工月報的三大瓶頸</h2>
+    <div class="divider"></div>
+    <p class="sec-desc">
+      品保費用涉及五個廠區、數十個會計科目、橫跨 24+ 個月歷史對照，
+      傳統 Excel 人工彙整流程在規模化下逐漸暴露結構性問題。
+    </p>
+    <div class="grid3">
+      <div class="gcard fade-up">
+        <span class="card-icon">📑</span>
+        <div class="card-title">跨表彙整費時且易錯</div>
+        <div class="card-body">
+          費用、營收、人頭數分散在不同分頁；每次月報需手動樞紐分析、串接 VLOOKUP、
+          重算 MoM 與 YoY，<strong style="color:var(--white)">單次出報耗時 4–8 小時</strong>，
+          公式拉錯一格全月數據連動失準。
+        </div>
+      </div>
+      <div class="gcard fade-up">
+        <span class="card-icon">🔍</span>
+        <div class="card-title">異常憑經驗、無客觀依據</div>
+        <div class="card-body">
+          費用是否「異常」全靠資深同仁主觀判斷，缺乏統計門檻。
+          <strong style="color:var(--white)">營收稀釋效應</strong>常讓費用率「看起來正常」，
+          但實際固定成本已悄悄擴張，傳統指標完全看不出來。
+        </div>
+      </div>
+      <div class="gcard fade-up">
+        <span class="card-icon">📄</span>
+        <div class="card-title">靜態 PDF 無法鑽取</div>
+        <div class="card-body">
+          PDF/PPT 報告交出去就定型，主管想多看一個廠、換一個年份比較，
+          只能再請部門重做一份。資料一旦凍結，<strong style="color:var(--white)">決策節奏被報告週期綁住</strong>。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ARCHITECTURE ── -->
+<div class="sec fade-up" id="architecture">
+  <span class="sec-tag">02 — Architecture</span>
+  <h2 class="sec-title">從 Excel 變動到郵件送達</h2>
+  <div class="divider"></div>
+  <p class="sec-desc">
+    使用者唯一需要做的事 —— 把每月費用整理 Excel 存檔。
+    系統偵測到檔案異動後，自動完成解析、計算、AI 摘要、報告生成、郵件寄送的完整管線。
+  </p>
+  <div class="arch-flow">
+    <div class="arch-step">
+      <div class="arch-circle ac1">📊</div>
+      <div class="arch-label">Excel 存檔</div>
+      <div class="arch-sub">費用整理.xlsx<br>Detail / 人事製圖 / 預算<br>三分頁原始資料</div>
+    </div>
+    <div class="arch-step">
+      <div class="arch-circle ac2">👁</div>
+      <div class="arch-label">檔案監聽</div>
+      <div class="arch-sub">watch.js (debounce 3s)<br>偵測 mtime 異動<br>pm2 常駐執行</div>
+    </div>
+    <div class="arch-step">
+      <div class="arch-circle ac3">⚙️</div>
+      <div class="arch-label">資料解析</div>
+      <div class="arch-sub">parse_data.js<br>xlsx 讀取 + 三層樞紐<br>科目分類 + 統計指標</div>
+    </div>
+    <div class="arch-step">
+      <div class="arch-circle ac4">🤖</div>
+      <div class="arch-label">AI 智能摘要</div>
+      <div class="arch-sub">Anthropic Claude API<br>異常自動白話化<br>產出本月重點 bullets</div>
+    </div>
+    <div class="arch-step">
+      <div class="arch-circle ac5">📧</div>
+      <div class="arch-label">報告 + 郵件</div>
+      <div class="arch-sub">HTML 互動報告<br>nodemailer 自動寄送<br>主管即時收到</div>
+    </div>
+  </div>
+  <div class="plant-row" style="margin-top:36px">
+    <span class="ptag">🏭 GQA — 全球品保中心</span>
+    <span class="ptag">🏭 DQA — 設計品保</span>
+    <span class="ptag">🏭 ZTM</span>
+    <span class="ptag">🏭 ZCM</span>
+    <span class="ptag">🏭 PHV</span>
+  </div>
+</div>
+
+<!-- ── METHODOLOGY ── -->
+<div class="sec-dark" id="method">
+  <div class="sec fade-up">
+    <span class="sec-tag">03 — Methodology</span>
+    <h2 class="sec-title">三層分析方法論</h2>
+    <div class="divider"></div>
+    <p class="sec-desc">
+      不只是把 Excel 視覺化 —— 系統內建統計管制、多維拆解與規則式判讀引擎，
+      讓主管看到的不只是數字，而是「現在到底發生了什麼事」。
+    </p>
+    <div class="layer-grid">
+      <div class="lcard lcard-l1 fade-up">
+        <div class="lcard-bg">L1</div>
+        <span class="lbadge lb-cyan">統計管制</span>
+        <div class="lcard-title">UCL / LCL 管制圖</div>
+        <div class="lcard-desc">
+          費用占營收比以歷史 27 個月為基線，計算 UCL（μ+1σ）、LCL（μ−1σ）。
+          疊加 MA3 / MA6 移動平均、綠 / 黃 / 紅三段管制帶（2% / 3% 門檻基於歷史 P25 / P75 校準）。
+        </div>
+        <div class="lcard-tip">
+          💡 客觀判斷費用率是否真的「異常」，不再憑感覺
+        </div>
+      </div>
+      <div class="lcard lcard-l2 fade-up">
+        <div class="lcard-bg">L2</div>
+        <span class="lbadge lb-violet">三層拆解</span>
+        <div class="lcard-title">可控 / 不可控 / 人均</div>
+        <div class="lcard-desc">
+          剝離營收波動，從三個獨立維度檢視：<strong style="color:var(--white)">可控費用率 MoM</strong>（變動成本）、
+          <strong style="color:var(--white)">不可控同期比 YoY</strong>（固定成本擴張速度）、
+          <strong style="color:var(--white)">人均費用 YoY</strong>（單位人力效率）。
+        </div>
+        <div class="lcard-tip">
+          💡 三維交叉判讀，避免被單一指標的營收稀釋誤導
+        </div>
+      </div>
+      <div class="lcard lcard-l3 fade-up">
+        <div class="lcard-bg">L3</div>
+        <span class="lbadge lb-purple">規則判讀</span>
+        <div class="lcard-title">Verdict 自動結論</div>
+        <div class="lcard-desc">
+          三維布林旗標組合，輸出 6 種預設情境的判讀文字（合理成長 / 實質失控 / 固定擴張 / 變動偏高 / 全部穩定 / 部分偏離），
+          失控情境再追加<strong style="color:var(--white)"> YoY +5 萬以上 top 3 主因科目</strong>。
+        </div>
+        <div class="lcard-tip">
+          💡 主管直接看結論，不用自己解讀數字
+        </div>
+      </div>
+    </div>
+
+    <!-- Verdict matrix table -->
+    <div style="margin-top:32px;font-size:12px;color:var(--muted);letter-spacing:.5px;margin-bottom:8px">▸ Verdict 規則矩陣（節錄）</div>
+    <div class="vmx">
+      <table class="vmx-tbl">
+        <thead>
+          <tr>
+            <th>三維旗標組合</th>
+            <th>判讀文字</th>
+            <th>等級</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>不可控漲、可控穩、人均穩</td>
+            <td>不可控費用上升主要由擴編帶動（人均未漲），屬合理成長</td>
+            <td><span class="vpill vp-ok">🟢 ok</span></td>
+          </tr>
+          <tr>
+            <td>可控漲、人均漲</td>
+            <td>可控費用率與人均同步上升，實質失控需介入</td>
+            <td><span class="vpill vp-warn">🔴 warn</span></td>
+          </tr>
+          <tr>
+            <td>人均漲、可控穩</td>
+            <td>人均費用上升但可控費用率穩定，留意固定成本擴張</td>
+            <td><span class="vpill vp-cau">🟡 caution</span></td>
+          </tr>
+          <tr>
+            <td>三項皆穩</td>
+            <td>拆解後各項穩定，費用率波動主要來自營收</td>
+            <td><span class="vpill vp-ok">🟢 ok</span></td>
+          </tr>
+          <tr>
+            <td>其他</td>
+            <td>部分項目偏離，建議展開廠區主因確認</td>
+            <td><span class="vpill vp-info">🟣 info</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── COVERAGE ── -->
+<div class="sec fade-up" id="coverage">
+  <span class="sec-tag">04 — Coverage</span>
+  <h2 class="sec-title">報告功能涵蓋</h2>
+  <div class="divider"></div>
+  <p class="sec-desc">
+    單一報告整合十類分析區塊，從總覽 KPI 到科目級異常追蹤，
+    支援即時切換年 / 月 / 廠 / 類型多維篩選。
+  </p>
+  <div class="cov-grid">
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">01</div><div class="cov-name">六大 KPI 卡</div></div>
+      <div class="cov-body">集團營收、品保總費用、費用占營收比、YTD 累計、預算執行率、人事費占比。MoM 變動以紅 / 綠醒目標示。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">02</div><div class="cov-name">AI 本月摘要</div></div>
+      <div class="cov-body">Claude API 接收結構化指標，生成中文 bullets：MoM / YoY 變化、管制帶警示、異常科目明細、廠區主因拆解。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">03</div><div class="cov-name">費用 vs 營收趨勢</div></div>
+      <div class="cov-body">混合圖：費用柱狀 + 營收折線，肉眼判斷費用是否與營收同向變動。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">04</div><div class="cov-name">費用占比管制圖</div></div>
+      <div class="cov-body">綠 / 黃 / 紅背景區帶 + UCL / LCL 紅虛線 + MA3 / MA6 + 趨勢線，四層指標疊加。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">05</div><div class="cov-name">人事費 / 各廠人數趨勢</div></div>
+      <div class="cov-body">人事費占比與五廠人頭數同步呈現，捕捉「人縮快於費用」與「擴編未反映在費用」兩種訊號。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">06</div><div class="cov-name">可控 / 不可控拆分</div></div>
+      <div class="cov-body">薪資 / 勞健保 / 折舊 / 攤提歸入不可控；加班費 / 旅費 / 檢測費 / 物料歸入可控。雙軸對比月度趨勢。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">07</div><div class="cov-name">預算 vs 實際 + 執行率</div></div>
+      <div class="cov-body">五廠各自預算進度條（Burn Rate），超 / 達 / 未達門檻自動配色，年底前可視化「會不會超支」。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">08</div><div class="cov-name">Run Rate 全年預測</div></div>
+      <div class="cov-body">以已知月份的實績外推剩餘月份，給出全年預估值，超預算月份紅字警示。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">09</div><div class="cov-name">廠區科目明細</div></div>
+      <div class="cov-body">下鑽到月 × 廠 × 科目層級金額表，含 MoM、YoY、vs 前 3 月均值的差異欄。</div>
+    </div>
+    <div class="cov-card fade-up">
+      <div class="cov-head"><div class="cov-num">10</div><div class="cov-name">異常 Top 5 + 單月偵測</div></div>
+      <div class="cov-body">超 / 低均值門檻自動標記，同步列出貢獻最大的廠區與科目原因 chips。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── INSIGHTS ── -->
+<div class="sec-dark" id="insights">
+  <div class="sec fade-up">
+    <span class="sec-tag">05 — Hidden Insights</span>
+    <h2 class="sec-title">系統挖出的關鍵發現</h2>
+    <div class="divider"></div>
+    <p class="sec-desc">
+      自動化的真正價值，不只是「把人做的事做快」，
+      而是「揭露人眼看不到的訊號」。以下是平台運轉至今三個最有代表性的發現。
+    </p>
+
+    <div class="ins-card fade-up">
+      <span class="ins-tag">Finding 1 · 拆解判讀的價值</span>
+      <div class="ins-title">2026/02 黃區邊緣 → 拆解後其實健康</div>
+      <div class="ins-body">
+        該月份總費用率 <strong>2.99%</strong>，幾乎踩到紅區門檻，傳統判讀會直接亮警報。
+        但三維拆解後 <strong>可控費用率穩定、不可控未漲、人均也穩</strong> ——
+        系統判讀為 🟢 <strong>「拆解後各項穩定，費用率波動主要來自營收」</strong>。
+      </div>
+      <div class="ins-quote">
+        意義：證明「黃區月份」往往是營收稀釋造成的假警報，傳統觀察會誘導企業做出錯誤的成本縮減決策。
+      </div>
+    </div>
+
+    <div class="ins-card fade-up">
+      <span class="ins-tag">Finding 2 · 被薪資減少蓋過的訊號</span>
+      <div class="ins-title">2025 全年人均 YoY 多數 +10% 以上 → 傳統指標完全看不到</div>
+      <div class="ins-body">
+        2025 年人事費下降（人從 91 縮到 69），總費用率與不可控 YoY 都呈現「正常或下降」。
+        但<strong>人均費用 YoY 卻一路 +10% 以上</strong>，代表
+        <strong>不可控費用沒有等比例縮減，固定成本被攤到較少人身上</strong>。
+        這個訊號被「人事費下降」完全蓋住，必須拆解到人均維度才能挖出。
+      </div>
+      <div class="ins-quote">
+        意義：縮編節省的薪資成本，部分被未縮減的固定費用吃掉 —— 真實的單位人力成本反而上升。
+      </div>
+    </div>
+
+    <div class="ins-card fade-up">
+      <span class="ins-tag">Finding 3 · 主因科目自動定位</span>
+      <div class="ins-title">「固定擴張」每月真主因都是同三項</div>
+      <div class="ins-body">
+        系統 <code>topYoYRisers</code> 演算法跨月一致指出：
+        <strong>折舊-房屋建築（去年同期 0 → 今年 11~16 萬）、
+        折舊-儀器設備（+50~130%）、保險費（0 → 10~17 萬）</strong>。
+        推論：2024 下半年新增房屋 / 儀器資產，2025 起攤提入帳。
+      </div>
+      <div class="ins-quote">
+        意義：傳統「總費用率」與「不可控 YoY」（被薪資縮減蓋成負值）裡完全看不到，
+        只有人均 + 科目級拆解才挖得出來 —— 這是真正的固定成本擴張源頭。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TECH HIGHLIGHTS ── -->
+<div class="sec fade-up" id="tech">
+  <span class="sec-tag">06 — Innovation</span>
+  <h2 class="sec-title">技術亮點</h2>
+  <div class="divider"></div>
+  <p class="sec-desc">
+    在標準 BI 工具的能力之外，本平台針對品保費用的特性設計了七項關鍵技術機制。
+  </p>
+  <div class="tech-grid">
+    <div class="tech-card fade-up">
+      <h4><span>1.</span>純前端互動報告（零後端依賴）</h4>
+      <p>所有資料以常數形式 inline 注入 HTML，搭配 Chart.js 4.4 與原生 JS。
+      單一 .html 檔可寄送、可離線開、可上 GitHub Pages，
+      <strong style="color:var(--white)">主管收到郵件後雙擊即可看到完整互動報告</strong>，
+      無需登入任何系統、無需 VPN、無資料庫成本。</p>
+    </div>
+    <div class="tech-card fade-up">
+      <h4><span>2.</span>檔案監聽 + Debounce 自動觸發</h4>
+      <p><code>watch.js</code> 透過 fs.statSync 監測 Excel mtime 異動，
+      <strong style="color:var(--white)">3 秒 debounce</strong> 排除 Excel 存檔過程的多次寫入事件，
+      搭配 pm2 常駐確保系統重開機自動重啟。<strong style="color:var(--white)">使用者操作體驗 = 無感</strong>。</p>
+    </div>
+    <div class="tech-card fade-up">
+      <h4><span>3.</span>Claude API 智能摘要</h4>
+      <p>整合 <code>@anthropic-ai/sdk</code>，將結構化指標餵給 Claude，
+      產出符合品保語境的中文 bullets。摘要內容包含 MoM / YoY 解讀、管制帶警示、
+      異常科目白話化說明，<strong style="color:var(--white)">把「需要分析師才能寫的段落」自動化</strong>。</p>
+    </div>
+    <div class="tech-card fade-up">
+      <h4><span>4.</span>統計管制圖（UCL / LCL / σ）</h4>
+      <p>費用占比以歷史 27 個月計算 μ ± 1σ 管制線，疊加 MA3 / MA6 移動平均與三段管制帶。
+      門檻取自歷史 P25 / P75 校準，<strong style="color:var(--white)">提供客觀的「異常 vs 正常」分界</strong>，
+      取代過去依賴經驗的主觀判斷。</p>
+    </div>
+    <div class="tech-card fade-up">
+      <h4><span>5.</span>三維 Verdict 規則引擎</h4>
+      <p>布林旗標組合（<code>ctrlBad</code> / <code>uncBad</code> / <code>perCapBad</code>）
+      映射到 6 種預設判讀文字 + 對應等級色（🟢 / 🟡 / 🔴 / 🟣）。
+      失控情境自動追加 YoY +5 萬以上的 top 3 主因科目，
+      <strong style="color:var(--white)">主管看到的不是數字而是行動建議</strong>。</p>
+    </div>
+    <div class="tech-card fade-up">
+      <h4><span>6.</span>科目級 YoY 漲幅追蹤</h4>
+      <p><code>topYoYRisers</code> 按 FIXED / VARIABLE 分類加總，
+      過濾絕對差 ≥ 5 萬，依漲幅排序取 top N。
+      <strong style="color:var(--white)">直接定位到「哪個科目」漲了「多少錢」</strong>，
+      而不是只說「不可控費用上升了」。</p>
+    </div>
+    <div class="tech-card fade-up">
+      <h4><span>7.</span>多維篩選 + Sticky 篩選列</h4>
+      <p>年 / 月 / 廠多選即時切換，所有圖表同步重繪。
+      <code>IntersectionObserver</code> 偵測 sentinel，捲動時篩選列自動黏在頂端，
+      <strong style="color:var(--white)">主管想看哪個切片就直接點，不用回部門重做報告</strong>。</p>
+    </div>
+
+  <!-- Stack -->
+  <div class="fade-up" style="margin-top:36px;width:100%;display:block">
+    <div style="font-size:12px;color:var(--muted);letter-spacing:.5px;margin-bottom:16px">▸ 技術堆疊</div>
+    <div class="stack-flow">
+      <div class="sflow-item">
+        <div class="sflow-icon" style="border-color:rgba(167,139,250,.5);background:rgba(167,139,250,.10)">⚙️</div>
+        <div class="sflow-name" style="color:var(--violet)">Node.js</div>
+        <div class="sflow-role">執行平台</div>
+      </div>
+      <span class="sflow-arrow">›</span>
+      <div class="sflow-item">
+        <div class="sflow-icon">📊</div>
+        <div class="sflow-name">xlsx</div>
+        <div class="sflow-role">Excel 解析</div>
+      </div>
+      <span class="sflow-arrow">›</span>
+      <div class="sflow-item">
+        <div class="sflow-icon">👁</div>
+        <div class="sflow-name">fs.watch</div>
+        <div class="sflow-role">檔案監聽</div>
+      </div>
+      <span class="sflow-arrow">›</span>
+      <div class="sflow-item">
+        <div class="sflow-icon">🤖</div>
+        <div class="sflow-name">Claude API</div>
+        <div class="sflow-role">AI 摘要</div>
+      </div>
+      <span class="sflow-arrow">›</span>
+      <div class="sflow-item">
+        <div class="sflow-icon">📈</div>
+        <div class="sflow-name">Chart.js</div>
+        <div class="sflow-role">互動圖表</div>
+      </div>
+      <span class="sflow-arrow">›</span>
+      <div class="sflow-item">
+        <div class="sflow-icon">📧</div>
+        <div class="sflow-name">nodemailer</div>
+        <div class="sflow-role">郵件寄送</div>
+      </div>
+      <span class="sflow-arrow">›</span>
+      <div class="sflow-item">
+        <div class="sflow-icon">🔁</div>
+        <div class="sflow-name">pm2</div>
+        <div class="sflow-role">常駐管理</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── VALUE ── -->
+<div class="sec-dark" id="value">
+  <div class="sec fade-up">
+    <span class="sec-tag">07 — Business Value</span>
+    <h2 class="sec-title">導入效益</h2>
+    <div class="divider"></div>
+    <p class="sec-desc">
+      系統將原本人工、靜態、被動的月報流程，
+      轉化為自動、互動、主動洞察的決策輔助平台。
+    </p>
+    <div class="grid3" style="margin-bottom:24px">
+      <div class="val-card fade-up">
+        <span class="val-num">分鐘</span>
+        <div class="val-title">人工耗時歸零</div>
+        <div class="val-desc">原本每月 4–8 小時的彙整作業，現在使用者只需把 Excel 存檔，<strong>分鐘級完成</strong>整份報告 + 郵件。</div>
+      </div>
+      <div class="val-card fade-up">
+        <span class="val-num">5×3</span>
+        <div class="val-title">五廠 × 三層分析</div>
+        <div class="val-desc">5 廠 × 3 維（可控/不可控/人均）× 6 種 verdict，單一報告涵蓋 30+ 個獨立判讀組合。</div>
+      </div>
+      <div class="val-card fade-up">
+        <span class="val-num">即時</span>
+        <div class="val-title">互動鑽取</div>
+        <div class="val-desc">主管想看哪個年 / 月 / 廠的切片，<strong>篩選列直接切換</strong>，不用再請部門重做一份報告。</div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="ba-card fade-up" style="border-left:3px solid rgba(248,113,113,.45)">
+        <span class="ba-label">BEFORE — 人工月報時代</span>
+        <ul class="ba-list" style="color:var(--muted)">
+          <li>❌ 每月跨表彙整 4–8 小時</li>
+          <li>❌ 異常憑經驗，無客觀統計依據</li>
+          <li>❌ 費用率被營收稀釋誤導判斷</li>
+          <li>❌ 靜態 PDF 無法切換切片</li>
+          <li>❌ 「為什麼漲」需要人工逐月對科目</li>
+          <li>❌ 報告週期綁住決策節奏</li>
+        </ul>
+      </div>
+      <div class="ba-card fade-up" style="border-left:3px solid rgba(52,211,153,.45)">
+        <span class="ba-label">AFTER — 自動化平台導入後</span>
+        <ul class="ba-list" style="color:var(--text)">
+          <li>✅ 存檔即觸發，分鐘級完成</li>
+          <li>✅ UCL / LCL 統計管制提供客觀門檻</li>
+          <li>✅ 三維拆解剝離營收波動</li>
+          <li>✅ HTML 互動報告即時鑽取</li>
+          <li>✅ 主因科目自動定位 top 3</li>
+          <li>✅ AI 摘要 + 自動郵件主動推播</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<div class="cta">
+  <span class="sec-tag" style="display:block;text-align:center">08 — Next Steps</span>
+  <h2 class="sec-title">把人工報告<br>升級為智能決策平台</h2>
+  <div class="divider" style="margin:18px auto"></div>
+  <p>
+    本架構可依貴公司科目分類、廠區數量、預算機制、報告風格進行客製化調整，
+    從零部署到第一份自動化月報通常 2–4 週可完成。
+  </p>
+  <div class="tag-row">
+    <span class="ctag">✦ 資料管線設計</span>
+    <span class="ctag">✦ 統計門檻校準</span>
+    <span class="ctag">✦ 判讀規則客製</span>
+    <span class="ctag">✦ AI 摘要對接</span>
+    <span class="ctag">✦ 郵件分發整合</span>
+  </div>
+</div>
+
+<footer>
+  品保費用月報自動化平台 &nbsp;／&nbsp; Confidential · For Discussion Purposes Only
+</footer>
+
+<script>
+// ── Scroll fade-in ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// ── Active nav highlight ──
+const navSections = document.querySelectorAll('#challenge,#architecture,#method,#coverage,#insights,#tech,#value');
+const navLinks = document.querySelectorAll('.nav-links a');
+function updateNav() {
+  let cur = '';
+  navSections.forEach(s => {
+    if (s.getBoundingClientRect().top <= 72) cur = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+  });
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+window.addEventListener('hashchange', () => setTimeout(updateNav, 100));
+</script>
+</body>
+</html>
