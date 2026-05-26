@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>客訴案件管理與結案流程</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      line-height: 1.6;
+    }
+
+    /* ── Hero ─────────────────────────────────────────── */
+    .hero {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 72px 40px 60px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #f1f5f9; border-radius: 999px;
+      padding: 5px 16px; font-size: 0.78rem;
+      color: #64748b; font-weight: 600; letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900; color: #0f172a;
+      letter-spacing: -0.5px; line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .hero-sub {
+      font-size: 1rem; color: #64748b; max-width: 560px;
+      margin: 0 auto 28px; line-height: 1.75;
+    }
+    .hero-tools {
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    }
+    .tool-tag {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 8px; padding: 6px 14px;
+      font-size: 0.82rem; font-weight: 700; color: #334155;
+    }
+    .tool-tag.lists   { border-color: #bfdbfe; background: #eff6ff; color: #1d4ed8; }
+    .tool-tag.teams   { border-color: #ddd6fe; background: #f5f3ff; color: #6d28d9; }
+    .tool-tag.planner { border-color: #bbf7d0; background: #f0fdf4; color: #15803d; }
+
+    /* ── Shared layout ────────────────────────────────── */
+    .page-section { max-width: 860px; margin: 0 auto; padding: 64px 24px; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: #94a3b8; margin-bottom: 10px;
+    }
+    .section-heading {
+      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+      font-weight: 800; color: #0f172a; margin-bottom: 6px;
+    }
+    .section-sub {
+      font-size: 0.93rem; color: #64748b; margin-bottom: 36px; line-height: 1.7;
+    }
+    .sep { border: none; border-top: 1px solid #f1f5f9; }
+
+    /* ── Flow Steps ───────────────────────────────────── */
+    .flow { display: flex; flex-direction: column; }
+    .flow-item {
+      display: grid; grid-template-columns: 48px 1fr;
+      gap: 0 20px; position: relative;
+    }
+    .flow-item:not(:last-child) .flow-spine::after {
+      content: '';
+      position: absolute; left: 23px; top: 48px; bottom: -8px;
+      width: 1px; background: #e2e8f0;
+    }
+    .flow-spine { position: relative; display: flex; flex-direction: column; align-items: center; }
+    .flow-num {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: #0f172a; color: white;
+      font-size: 0.95rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; z-index: 1;
+    }
+    .flow-card {
+      background: #ffffff; border: 1px solid #e2e8f0;
+      border-radius: 14px; padding: 20px 22px;
+      margin-bottom: 12px;
+      transition: box-shadow 0.15s;
+    }
+    .flow-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .flow-card-head {
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap; margin-bottom: 8px;
+    }
+    .flow-card-title {
+      font-size: 0.97rem; font-weight: 800; color: #0f172a;
+    }
+    .tool-chip {
+      font-size: 0.68rem; font-weight: 700; padding: 2px 8px;
+      border-radius: 5px; white-space: nowrap;
+    }
+    .chip-lists   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .chip-teams   { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+    .chip-planner { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .flow-desc { font-size: 0.87rem; color: #475569; line-height: 1.7; }
+    .flow-note {
+      margin-top: 10px; padding: 10px 14px;
+      background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;
+      font-size: 0.82rem; color: #64748b; line-height: 1.65;
+    }
+    .flow-note strong { color: #334155; }
+    .auto-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 10px; padding: 4px 10px;
+      background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: 6px; font-size: 0.76rem;
+      color: #15803d; font-weight: 600;
+    }
+    .warn-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 10px; padding: 4px 10px;
+      background: #fffbeb; border: 1px solid #fde68a;
+      border-radius: 6px; font-size: 0.76rem;
+      color: #92400e; font-weight: 600;
+    }
+
+    /* ── Efficiency Compare ───────────────────────────── */
+    .compare-bg { background: #f8fafc; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+    .compare-grid {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: start;
+    }
+    @media (max-width: 680px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .compare-arr { transform: rotate(90deg); padding: 8px 0 !important; }
+    }
+    .compare-col { border-radius: 14px; padding: 24px 22px; }
+    .compare-col.old { background: white; border: 1px solid #fecaca; }
+    .compare-col.new { background: white; border: 1px solid #bbf7d0; }
+    .compare-head {
+      font-size: 0.9rem; font-weight: 800; margin-bottom: 18px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .compare-col.old .compare-head { color: #b91c1c; }
+    .compare-col.new .compare-head { color: #15803d; }
+    .compare-rows { display: flex; flex-direction: column; gap: 8px; }
+    .compare-row {
+      padding: 10px 12px; border-radius: 8px;
+      border: 1px solid #f1f5f9; background: #fafafa;
+    }
+    .compare-row .cr-label {
+      font-size: 0.82rem; font-weight: 700; margin-bottom: 3px;
+    }
+    .compare-col.old .cr-label { color: #b91c1c; }
+    .compare-col.new .cr-label { color: #15803d; }
+    .compare-row .cr-desc { font-size: 0.78rem; color: #64748b; line-height: 1.5; }
+    .compare-foot {
+      margin-top: 14px; padding: 9px 14px; border-radius: 8px;
+      font-size: 0.8rem; font-weight: 700; text-align: center;
+    }
+    .compare-col.old .compare-foot { background: #fee2e2; color: #b91c1c; }
+    .compare-col.new .compare-foot { background: #dcfce7; color: #15803d; }
+    .compare-arr {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; color: #cbd5e1;
+      padding: 0 16px; padding-top: 60px;
+    }
+
+    /* 數字成效列 */
+    .metrics-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px; margin-bottom: 32px;
+    }
+    .metric-box {
+      background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+      padding: 20px 14px; text-align: center;
+    }
+    .metric-box .mb-num {
+      font-size: 2rem; font-weight: 900; color: #0f172a; line-height: 1;
+    }
+    .metric-box .mb-unit { font-size: 0.85rem; font-weight: 700; color: #94a3b8; }
+    .metric-box .mb-desc { font-size: 0.78rem; color: #64748b; margin-top: 6px; line-height: 1.4; }
+
+    /* ── Reminder ─────────────────────────────────────── */
+    .reminder-bg { background: #0f172a; }
+    .reminder-inner { max-width: 860px; margin: 0 auto; padding: 64px 24px; }
+    .reminder-inner .section-label { color: rgba(255,255,255,0.35); }
+    .reminder-inner .section-heading { color: white; }
+    .reminder-inner .section-sub { color: rgba(255,255,255,0.5); }
+    .reminder-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;
+    }
+    .rem-card {
+      border-radius: 12px; padding: 24px 20px; text-align: center;
+      border: 1px solid transparent;
+    }
+    .rem-card.g { background: rgba(34,197,94,0.06); border-color: rgba(34,197,94,0.2); }
+    .rem-card.y { background: rgba(234,179,8,0.06);  border-color: rgba(234,179,8,0.2); }
+    .rem-card.r { background: rgba(239,68,68,0.06);  border-color: rgba(239,68,68,0.2); }
+    .rem-card .ri { font-size: 2.2rem; margin-bottom: 10px; }
+    .rem-card .rt { font-size: 1.1rem; font-weight: 900; margin-bottom: 4px; }
+    .rem-card.g .rt { color: #4ade80; }
+    .rem-card.y .rt { color: #facc15; }
+    .rem-card.r .rt { color: #f87171; }
+    .rem-card .rl { font-size: 0.82rem; font-weight: 700; margin-bottom: 8px; }
+    .rem-card.g .rl { color: #86efac; }
+    .rem-card.y .rl { color: #fde68a; }
+    .rem-card.r .rl { color: #fca5a5; }
+    .rem-card .rd { font-size: 0.78rem; color: rgba(255,255,255,0.42); line-height: 1.55; }
+
+    /* ── Planner ──────────────────────────────────────── */
+    .planner-bg { background: #ffffff; border-top: 1px solid #f1f5f9; }
+    .planner-inner { max-width: 860px; margin: 0 auto; padding: 64px 24px; }
+    .planner-notice {
+      background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px;
+      padding: 16px 20px; margin-bottom: 28px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .planner-notice .pn-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .planner-notice p { font-size: 0.87rem; color: #78350f; line-height: 1.65; }
+    .planner-notice strong { color: #451a03; }
+    .planner-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;
+    }
+    .planner-card {
+      border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 20px;
+      display: flex; gap: 12px; align-items: flex-start;
+      background: white;
+    }
+    .planner-card:hover { background: #fafafa; }
+    .planner-card .pc-icon {
+      font-size: 1.4rem; flex-shrink: 0;
+      width: 38px; height: 38px; border-radius: 8px;
+      background: #f1f5f9;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .planner-card h3 { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 3px; }
+    .planner-card p  { font-size: 0.8rem; color: #64748b; line-height: 1.6; }
+
+    /* ── Footer note ──────────────────────────────────── */
+    .foot-note {
+      border-top: 1px solid #f1f5f9; padding: 32px 24px;
+      text-align: center;
+    }
+    .foot-note p { font-size: 0.82rem; color: #94a3b8; }
+    .foot-note strong { color: #475569; }
+  </style>
+</head>
+<body>
+
+<!-- ① Hero -->
+<header class="hero">
+  <div class="hero-eyebrow">Global Quality Assurance &nbsp;·&nbsp; Zerova Technologies</div>
+  <h1>客訴案件管理與結案流程</h1>
+  <p class="hero-sub">
+    整合 Microsoft 365 三大工具，讓客訴案件從立案到結案<br>
+    全程透明、自動追蹤、準時完成
+  </p>
+  <div class="hero-tools">
+    <span class="tool-tag lists">📋 Lists &nbsp;立案管理</span>
+    <span class="tool-tag teams">💬 Teams &nbsp;即時通知</span>
+    <span class="tool-tag planner">✅ Planner &nbsp;任務追蹤</span>
+  </div>
+</header>
+
+<!-- ② 完整流程 -->
+<div>
+  <div class="page-section">
+    <div class="section-label">完整流程</div>
+    <h2 class="section-heading">7 個步驟，從立案到結案</h2>
+    <p class="section-sub">每個步驟系統自動串聯，不需要手動追蹤或 Email 催件</p>
+
+    <div class="flow">
+
+      <div class="flow-item">
+        <div class="flow-spine"><div class="flow-num">1</div></div>
+        <div class="flow-card">
+          <div class="flow-card-head">
+            <span class="flow-card-title">QPM 於 Lists 建立客訴案件</span>
+            <span class="tool-chip chip-lists">Lists</span>
+          </div>
+          <div class="flow-desc">QPM 在「客訴進度更新」清單中建立新案件，並填入相關資訊。</div>
+          <div class="flow-note"><strong>必填欄位：</strong>Error Code &nbsp;·&nbsp; Country &nbsp;·&nbsp; Part Name &nbsp;·&nbsp; Customer</div>
+          <div class="auto-badge">⚡ 建立後系統自動觸發後續通知</div>
+        </div>
+      </div>
+
+      <div class="flow-item">
+        <div class="flow-spine"><div class="flow-num">2</div></div>
+        <div class="flow-card">
+          <div class="flow-card-head">
+            <span class="flow-card-title">自動通知 Owner</span>
+            <span class="tool-chip chip-teams">Teams</span>
+          </div>
+          <div class="flow-desc">系統自動透過 Teams 發送通知給指定的 Owner，告知已有新客訴案件需要處理。</div>
+          <div class="auto-badge">⚡ 自動發送，無需手動通知</div>
+        </div>
+      </div>
+
+      <div class="flow-item">
+        <div class="flow-spine"><div class="flow-num">3</div></div>
+        <div class="flow-card">
+          <div class="flow-card-head">
+            <span class="flow-card-title">QPM 設定 Case Name 並建立 Action Item</span>
+            <span class="tool-chip chip-lists">Lists</span>
+            <span class="tool-chip chip-planner">Planner</span>
+          </div>
+          <div class="flow-desc">QPM 設定案件分類（Case Name），並建立對應的 Action Item 指派給 Owner。</div>
+          <div class="flow-note">
+            <strong>系統自動完成：</strong><br>
+            ① 透過 Teams 通知 Owner 任務詳情<br>
+            ② 在 Planner 同步建立對應任務
+          </div>
+          <div class="auto-badge">⚡ Lists → Teams → Planner 三方自動同步</div>
+        </div>
+      </div>
+
+      <div class="flow-item">
+        <div class="flow-spine"><div class="flow-num">4</div></div>
+        <div class="flow-card">
+          <div class="flow-card-head">
+            <span class="flow-card-title">Owner 於 Planner 完成任務並提交</span>
+            <span class="tool-chip chip-planner">Planner</span>
+          </div>
+          <div class="flow-desc">Owner 在 Planner 上更新處理進度，完成後打勾提交。勾選完成即觸發送審流程，系統自動通知主管進行審核。</div>
+          <div class="warn-badge">⚠️ 請確認任務真正完成後再打勾，勾選後系統自動送審主管</div>
+        </div>
+      </div>
+
+      <div class="flow-item">
+        <div class="flow-spine"><div class="flow-num">5</div></div>
+        <div class="flow-card">
+          <div class="flow-card-head">
+            <span class="flow-card-title">主管於 Teams 審核：核可 / 退件</span>
+            <span class="tool-chip chip-teams">Teams</span>
+          </div>
+          <div class="flow-desc">主管收到 Teams 審核通知後，可選擇核可或退件。</div>
+          <div class="flow-note">
+            <strong>✅ 核可：</strong>Action Item 自動記錄審核時間，Planner 任務標記完成<br>
+            <strong>↩️ 退件：</strong>Owner 收到通知需重新處理後再次提交
+          </div>
+          <div class="auto-badge">⚡ 審核時間自動記錄至 Lists</div>
+        </div>
+      </div>
+
+      <div class="flow-item">
+        <div class="flow-spine"><div class="flow-num">6</div></div>
+        <div class="flow-card">
+          <div class="flow-card-head">
+            <span class="flow-card-title">上傳 8D Report，發起結案審核</span>
+            <span class="tool-chip chip-lists">Lists</span>
+          </div>
+          <div class="flow-desc">工程師於 Lists 上傳 8D 報告，並在系統中發起正式結案審核申請。</div>
+          <div class="auto-badge">⚡ 送出後系統自動通知主管進行最終確認</div>
+        </div>
+      </div>
+
+      <div class="flow-item">
+        <div class="flow-spine"><div class="flow-num">7</div></div>
+        <div class="flow-card">
+          <div class="flow-card-head">
+            <span class="flow-card-title">主管確認結案，案件正式關閉</span>
+            <span class="tool-chip chip-teams">Teams</span>
+          </div>
+          <div class="flow-desc">主管於 Teams 收到最終確認通知，審核 8D Report 並完成結案。案件正式關閉，全程記錄留存於 Lists。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<hr class="sep" />
+
+<!-- ③ 效率比較 -->
+<div class="compare-bg">
+  <div class="page-section">
+    <div class="section-label">效率比較</div>
+    <h2 class="section-heading">人工 Excel vs 數位化系統，差在哪？</h2>
+    <p class="section-sub">舊流程缺乏專案管理與提醒機制，導致案件延遲、責任不清</p>
+
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="mb-num">0<span class="mb-unit"> 次</span></div>
+        <div class="mb-desc">需要手動寄信追件<br>系統全自動通知</div>
+      </div>
+      <div class="metric-box">
+        <div class="mb-num">3<span class="mb-unit"> 階段</span></div>
+        <div class="mb-desc">到期前自動提醒<br>Excel 完全沒有</div>
+      </div>
+      <div class="metric-box">
+        <div class="mb-num">自動</div>
+        <div class="mb-desc">記錄審核時間<br>無需人工填寫</div>
+      </div>
+      <div class="metric-box">
+        <div class="mb-num">即時</div>
+        <div class="mb-desc">掌握所有案件狀態<br>不漏件、不忘件</div>
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-col old">
+        <div class="compare-head">📊 人工 Excel 舊流程</div>
+        <div class="compare-rows">
+          <div class="compare-row">
+            <div class="cr-label">❌ 無專案管理</div>
+            <div class="cr-desc">Excel 只是靜態表格，無法指派任務、追蹤進度或設定截止日</div>
+          </div>
+          <div class="compare-row">
+            <div class="cr-label">❌ 無到期提醒</div>
+            <div class="cr-desc">靠人工記憶或土炮行事曆，容易漏件或逾期</div>
+          </div>
+          <div class="compare-row">
+            <div class="cr-label">❌ 通知靠手動 Email</div>
+            <div class="cr-desc">每次需人工寄信催件，溝通成本高、容易漏掉</div>
+          </div>
+          <div class="compare-row">
+            <div class="cr-label">❌ 審核時間無記錄</div>
+            <div class="cr-desc">審核結果僅靠 Email 往返，難以稽核與追溯</div>
+          </div>
+          <div class="compare-row">
+            <div class="cr-label">❌ 逾期只能靠人察覺</div>
+            <div class="cr-desc">無自動警示，案件逾期往往等主管問起才發現</div>
+          </div>
+        </div>
+        <div class="compare-foot">⏱ 依賴人工追蹤，風險高</div>
+      </div>
+
+      <div class="compare-arr">→</div>
+
+      <div class="compare-col new">
+        <div class="compare-head">⚡ Lists × Teams × Planner</div>
+        <div class="compare-rows">
+          <div class="compare-row">
+            <div class="cr-label">✅ Planner 專案管理</div>
+            <div class="cr-desc">每個案件自動建立 Planner 任務，指派負責人、設定截止日、追蹤進度</div>
+          </div>
+          <div class="compare-row">
+            <div class="cr-label">✅ 三階段自動提醒</div>
+            <div class="cr-desc">🟢 7天前 · 🟡 3天前 · 🔴 逾期每日09:00，系統主動通知不漏件</div>
+          </div>
+          <div class="compare-row">
+            <div class="cr-label">✅ Teams 自動通知</div>
+            <div class="cr-desc">立案、指派、送審、審核結果全程自動推播，無需手動寄信</div>
+          </div>
+          <div class="compare-row">
+            <div class="cr-label">✅ 自動記錄審核時間</div>
+            <div class="cr-desc">主管核可後 Lists 自動留存時間戳，完整稽核軌跡</div>
+          </div>
+          <div class="compare-row">
+            <div class="cr-label">✅ 逾期自動升級通知</div>
+            <div class="cr-desc">逾期時同步通知 Owner 與直屬主管，責任清晰不互相等待</div>
+          </div>
+        </div>
+        <div class="compare-foot">✅ 全程自動化，案件零漏失</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 到期提醒 -->
+<div class="reminder-bg">
+  <div class="reminder-inner">
+    <div class="section-label">到期提醒</div>
+    <h2 class="section-heading">三階段自動提醒機制</h2>
+    <p class="section-sub">Planner 任務到期前後，系統自動發送提醒，確保案件準時完成</p>
+    <div class="reminder-grid">
+      <div class="rem-card g">
+        <div class="ri">🟢</div>
+        <div class="rt">7 天前</div>
+        <div class="rl">提前準備</div>
+        <div class="rd">距離截止日還有一週，提醒 Owner 開始規劃處理進度</div>
+      </div>
+      <div class="rem-card y">
+        <div class="ri">🟡</div>
+        <div class="rt">3 天前</div>
+        <div class="rl">加強追蹤</div>
+        <div class="rd">截止日倒數 3 天，提醒 Owner 加快進度，確保準時完成</div>
+      </div>
+      <div class="rem-card r">
+        <div class="ri">🔴</div>
+        <div class="rt">逾期每日 09:00</div>
+        <div class="rl">逾期警示</div>
+        <div class="rd">任務逾期後每天 09:00 自動通知<br><strong style="color:#fca5a5;">同時通知 Owner + 直屬主管</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ Planner 使用說明 -->
+<div class="planner-bg">
+  <div class="planner-inner">
+    <div class="section-label">Planner 使用說明</div>
+    <h2 class="section-heading">如何使用 Planner 管理任務</h2>
+    <p class="section-sub">掌握這些功能，讓你的任務管理更有效率</p>
+
+    <div class="planner-notice">
+      <div class="pn-icon">⚠️</div>
+      <p><strong>重要：請確認任務真正完成後再打勾</strong><br>
+      勾選完成後，系統會自動送審給主管審核。請勿提前勾選未完成的任務。</p>
+    </div>
+
+    <div class="planner-grid">
+      <div class="planner-card">
+        <div class="pc-icon">📊</div>
+        <div>
+          <h3>更新個人處理進度</h3>
+          <p>隨時在任務卡片上更新目前進度，讓主管即時了解。</p>
+        </div>
+      </div>
+      <div class="planner-card">
+        <div class="pc-icon">➕</div>
+        <div>
+          <h3>新增個人待辦子項目</h3>
+          <p>在主任務下方新增子任務，拆解複雜工作，逐一完成。</p>
+        </div>
+      </div>
+      <div class="planner-card">
+        <div class="pc-icon">⊞</div>
+        <div>
+          <h3>方格 / 面板兩種視圖</h3>
+          <p>方格條列式顯示所有任務；面板卡片式更直覺，可自由切換。</p>
+        </div>
+      </div>
+      <div class="planner-card">
+        <div class="pc-icon">🗂️</div>
+        <div>
+          <h3>彈性分組顯示</h3>
+          <p>可依優先度、負責人、到期日等條件分組，快速找到需關注的任務。</p>
+        </div>
+      </div>
+      <div class="planner-card">
+        <div class="pc-icon">📎</div>
+        <div>
+          <h3>附件上傳</h3>
+          <p>任務卡片可附上 PPT、Excel、JPG、PDF 等相關文件，集中管理。</p>
+        </div>
+      </div>
+      <div class="planner-card">
+        <div class="pc-icon">👤</div>
+        <div>
+          <h3>只看自己的任務</h3>
+          <p>點「我的工作」→「已指派給我」，快速篩選出屬於你的清單。</p>
+        </div>
+      </div>
+      <div class="planner-card">
+        <div class="pc-icon">📅</div>
+        <div>
+          <h3>加入今日待辦</h3>
+          <p>點「…」→「新增到我的一天」，自己決定今天要優先執行哪些任務。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer note -->
+<div class="foot-note">
+  <p>如有操作疑問，請聯繫 Global Quality Assurance 團隊 &nbsp;·&nbsp; Prepared by <strong>Hailey Huang</strong></p>
+</div>
+
+</body>
+</html>
