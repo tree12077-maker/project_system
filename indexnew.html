@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>黃芝穎 Hailey Huang · Operations &amp; Digital Transformation</title>
+  <meta name="description" content="Hailey Huang - Operations &amp; Digital Transformation. 把流程痛點轉成 AI／自動化產品的 PM。">
+
+  <!-- Google Fonts (fail gracefully to system fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===================== Design Tokens ===================== */
+    :root {
+      --bg: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --accent: #1E3A8A;
+      --accent-hover: #1E40AF;
+      --border: #E2E8F0;
+      --card-border: #E5E7EB;
+      --shadow-sm: 0 1px 2px rgba(15,23,42,0.04);
+      --shadow-md: 0 4px 12px rgba(15,23,42,0.06);
+      --shadow-lg: 0 12px 28px rgba(15,23,42,0.10);
+
+      --font-tc: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      --font-en: "Inter", -apple-system, "Segoe UI", sans-serif;
+      --font-mixed: "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+
+      --container: 1120px;
+      --pad-x: clamp(20px, 5vw, 48px);
+    }
+
+    /* ===================== Reset & Base ===================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-mixed);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+    a:hover { color: var(--accent-hover); }
+    button { font: inherit; cursor: pointer; }
+
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding-left: var(--pad-x);
+      padding-right: var(--pad-x);
+    }
+
+    /* ===================== Nav ===================== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      transition: padding 0.25s, background 0.25s, box-shadow 0.25s;
+    }
+    .nav.scrolled {
+      padding: 10px 0;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-brand {
+      font-family: var(--font-en);
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    .nav-brand span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-lang {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .nav-lang:hover { border-color: var(--accent); color: var(--accent); }
+
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      width: 32px; height: 32px;
+      padding: 0;
+      position: relative;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--text);
+      position: absolute;
+      left: 5px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .nav-hamburger span:nth-child(1) { top: 10px; }
+    .nav-hamburger span:nth-child(2) { top: 16px; }
+    .nav-hamburger span:nth-child(3) { top: 22px; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* ===================== Sections (shared) ===================== */
+    section {
+      padding: 100px 0;
+    }
+    #about, #work, #contact {
+      padding-top: 40px;
+    }
+    .section-label {
+      font-family: var(--font-en);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0 0 48px 0;
+      color: var(--text);
+    }
+
+    /* ===================== Hero ===================== */
+    #hero {
+      padding-top: 140px;
+      padding-bottom: 64px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-tagline {
+      font-family: var(--font-en);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-size: clamp(36px, 5.5vw, 56px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin: 0 0 16px 0;
+    }
+    .hero-title em {
+      color: var(--accent);
+      font-style: normal;
+    }
+    .hero-subtitle {
+      font-family: var(--font-en);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .hero-desc {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 28px;
+      max-width: 540px;
+    }
+    .hero-kpis {
+      display: flex;
+      gap: 32px;
+      padding: 20px 0;
+      margin-bottom: 32px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-kpi-num {
+      font-family: var(--font-en);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .hero-kpi-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: white;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: white;
+      color: var(--text);
+      border-color: var(--card-border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+
+    /* Skills strip */
+    .hero-skills {
+      margin-top: 80px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .skill-card {
+      padding: 20px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      transition: all 0.2s;
+      background: white;
+    }
+    .skill-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .skill-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .skill-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .skill-tools {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        text-align: center;
+      }
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      .hero-kpis { justify-content: center; }
+      .hero-ctas { justify-content: center; }
+    }
+    @media (max-width: 600px) {
+      .hero-skills { grid-template-columns: repeat(2, 1fr); }
+      .hero-kpis { gap: 20px; }
+      .hero-kpi-num { font-size: 22px; }
+    }
+
+    /* ===================== About ===================== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+    }
+    .about-profile {
+      font-size: 17px;
+      line-height: 1.85;
+      max-width: 760px;
+      color: var(--text);
+    }
+
+    .about-subhead {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 24px 0;
+    }
+
+    /* Timeline */
+    .timeline {
+      border-left: 2px solid var(--border);
+      padding-left: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+    .timeline-item {
+      position: relative;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -41px;
+      top: 8px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .timeline-period {
+      font-family: var(--font-en);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .timeline-role {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 2px 0;
+    }
+    .timeline-company {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .timeline-bullets {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+    .timeline-bullets li { margin-bottom: 6px; }
+
+    /* Education */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .edu-card {
+      padding: 20px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background: white;
+    }
+    .edu-degree {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .edu-school {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .edu-meta {
+      font-family: var(--font-en);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Certifications */
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .cert-card {
+      padding: 16px 20px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+    }
+    .cert-badge {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .cert-name {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .cert-year {
+      font-family: var(--font-en);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Strength tags */
+    .strength-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .strength-tag {
+      padding: 8px 16px;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .about-block {
+      margin-top: 48px;
+    }
+    .about-block:first-child { margin-top: 0; }
+
+    @media (max-width: 768px) {
+      .edu-grid, .cert-grid { grid-template-columns: 1fr; }
+      .timeline { padding-left: 24px; }
+      .timeline-item::before { left: -33px; }
+    }
+
+    /* ===================== Work ===================== */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .work-card {
+      padding: 28px;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .work-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
+    }
+    .work-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 12px 0;
+      line-height: 1.4;
+    }
+    .work-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .work-tag {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      background: #EEF2FF;
+      color: var(--accent);
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+    .work-result {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+    .work-result strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .work-more {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: auto;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .modal-backdrop.open {
+      display: flex;
+      opacity: 1;
+    }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      max-width: 720px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+      transform: scale(0.95);
+      transition: transform 0.25s;
+    }
+    .modal-backdrop.open .modal {
+      transform: scale(1);
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid var(--card-border);
+      font-size: 20px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: all 0.15s;
+    }
+    .modal-close:hover {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+    .modal h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      padding-right: 48px;
+    }
+    .modal-subtitle {
+      font-family: var(--font-en);
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .modal-section {
+      margin-bottom: 22px;
+    }
+    .modal-section-label {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .modal-section-body {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+    .modal-section-body ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .modal-section-body li {
+      margin-bottom: 6px;
+    }
+    .modal-result-box {
+      background: #EEF2FF;
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .work-grid { grid-template-columns: 1fr; }
+      .modal { padding: 28px 24px; max-height: 95vh; border-radius: 12px; }
+      .modal h3 { font-size: 18px; }
+    }
+
+    /* ===================== Contact ===================== */
+    #contact {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+    }
+    .contact-intro {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 32px;
+      max-width: 600px;
+    }
+    .contact-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 28px;
+      border-radius: 12px;
+      background: white;
+      border: 1.5px solid var(--card-border);
+      color: var(--text);
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .contact-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      color: var(--text);
+    }
+    .contact-icon {
+      width: 44px; height: 44px;
+      background: var(--accent);
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .contact-label {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .contact-value {
+      font-family: var(--font-en);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 2px;
+    }
+    .contact-location {
+      font-size: 14px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .contact-btn { width: 100%; }
+    }
+
+    /* ===================== Footer ===================== */
+    .footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .footer-heart { color: #ef4444; }
+
+    /* ===================== Scroll Animations (set in Task 10) ===================== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===================== RWD (set in Task 10) ===================== */
+    @media (max-width: 768px) {
+      section { padding: 64px 0; }
+      .section-title { font-size: 26px; margin-bottom: 32px; }
+
+      .nav-hamburger { display: block; }
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: white;
+        flex-direction: column;
+        gap: 0;
+        padding: 16px 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transform: translateY(-10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.2s, opacity 0.2s;
+      }
+      .nav-links.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
+      }
+      .nav-links a {
+        padding: 12px 24px;
+        width: 100%;
+      }
+      .nav-lang {
+        margin: 8px 24px;
+        align-self: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#hero" class="nav-brand" data-i18n="nav.brand">Hailey<span>.</span></a>
+
+      <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#hero" data-i18n="nav.home">首頁</a>
+        <a href="#about" data-i18n="nav.about">關於</a>
+        <a href="#work" data-i18n="nav.work">作品</a>
+        <a href="#contact" data-i18n="nav.contact">聯絡</a>
+        <button class="nav-lang" id="langToggle">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-tagline" data-i18n="hero.tagline">TECHNICAL PROJECT MANAGEMENT · AI AUTOMATION</div>
+          <h1 class="hero-title" data-i18n="hero.title">把痛點<br>變成<em>產品</em>。</h1>
+          <div class="hero-subtitle" data-i18n="hero.subtitle">Hailey Huang · 黃芝穎</div>
+          <p class="hero-desc" data-i18n="hero.desc">統籌跨海外工廠製造測試軟體與專案管理，擅長把營運痛點轉成可規模化的數位產品與 AI／自動化解決方案。</p>
+          <div class="hero-kpis">
+            <div>
+              <div class="hero-kpi-num">10+</div>
+              <div class="hero-kpi-lbl" data-i18n="hero.kpi1">數位化專案</div>
+            </div>
+            <div>
+              <div class="hero-kpi-num">↑99%</div>
+              <div class="hero-kpi-lbl" data-i18n="hero.kpi2">月結效率</div>
+            </div>
+            <div>
+              <div class="hero-kpi-num">↓75%</div>
+              <div class="hero-kpi-lbl" data-i18n="hero.kpi3">開發週期</div>
+            </div>
+          </div>
+          <div class="hero-ctas">
+            <a href="#work" class="btn btn-primary" data-i18n="hero.cta1">看作品 →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-skills">
+        <div class="skill-card">
+          <div class="skill-icon">📊</div>
+          <div class="skill-name" data-i18n="skill.data">數據分析</div>
+          <div class="skill-tools">Power BI · Excel · DAX</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">⚙️</div>
+          <div class="skill-name" data-i18n="skill.automation">流程自動化</div>
+          <div class="skill-tools">Power Automate</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">💻</div>
+          <div class="skill-name" data-i18n="skill.code">程式開發</div>
+          <div class="skill-tools">Python · JavaScript · HTML</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🤖</div>
+          <div class="skill-name" data-i18n="skill.ai">AI 應用</div>
+          <div class="skill-tools">Claude API · OpenAI · NotebookLM · Prompt Engineering</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🧩</div>
+          <div class="skill-name" data-i18n="skill.product">產品 / Low-Code</div>
+          <div class="skill-tools">Base44 · MVP Prototyping</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🔗</div>
+          <div class="skill-name" data-i18n="skill.collab">協作平台</div>
+          <div class="skill-tools">Microsoft 365 · MES · SAP · Notion</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about">
+    <div class="container">
+      <div class="section-label" data-i18n="about.label">ABOUT</div>
+      <h2 class="section-title" data-i18n="about.title">關於我</h2>
+
+      <!-- Profile -->
+      <div class="about-block">
+        <p class="about-profile" data-i18n="about.profile">現任緯穎科技技術專案經理（TPM），負責跨海外工廠製造測試軟體與測試平台專案，協調研發、生產、品質等跨職能團隊推動專案落地。此前累積 3 年企業數位化與內部產品開發經驗，擅長從需求訪談、流程設計、MVP 快速開發到導入落地與持續迭代。熟悉 Power Automate、Power BI、Python 與 Claude Code，具備以 AI 與數據驅動流程自動化與決策優化之實務經驗，並曾擔任內部數位化講師，推動跨部門 BI 與 AI 工具導入。</p>
+      </div>
+
+      <!-- Experience Timeline -->
+      <div class="about-block">
+        <h3 class="about-subhead" data-i18n="about.expHead">EXPERIENCE</h3>
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-period" data-i18n="exp.0.period">AUG 2026 – PRESENT</div>
+            <h4 class="timeline-role" data-i18n="exp.0.role">技術專案經理 TPM｜製造測試軟體 / 測試平台專案管理 / AI 驅動流程自動化</h4>
+            <div class="timeline-company" data-i18n="exp.0.company">緯穎科技 Wiwynn</div>
+            <ul class="timeline-bullets">
+              <li data-i18n="exp.0.b1">主導跨海外工廠製造測試軟體與測試平台專案之規劃與執行，涵蓋開發至量產全階段，確保里程碑與交付項目如期達成</li>
+              <li data-i18n="exp.0.b2">協調 SW Test Engineering / Production / Design Engineering / Quality / Operations 等 5 大跨職能團隊，定義專案範疇、時程與交付標準</li>
+              <li data-i18n="exp.0.b3">推動測試流程 CT（Cycle Time）優化與自動化工作流程設計，降低人工作業負擔，提升測試效率與產線產出</li>
+              <li data-i18n="exp.0.b4">建立結構化風險追蹤與議題管理機制，推動優先級排序與問題收斂；持續優化專案管理流程，提升執行效率與透明度</li>
+            </ul>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-period" data-i18n="exp.1.period">JUL 2023 – JUL 2026</div>
+            <h4 class="timeline-role" data-i18n="exp.1.role">專案工程師｜數位轉型 / 部門運營 / 內部產品開發</h4>
+            <div class="timeline-company" data-i18n="exp.1.company">馳諾瓦科技（飛宏科技子公司）</div>
+            <ul class="timeline-bullets">
+              <li data-i18n="exp.1.b1">主導企業 AI／Automation 解決方案落地，完成 10+ 項數位化專案，降低重複性人工流程</li>
+              <li data-i18n="exp.1.b2">建置跨廠區品質數據平台，整合 3 座工廠 / 100+ 使用者 KPI 與報表流程，效率提升 ↑80%</li>
+              <li data-i18n="exp.1.b3">打造 FPYR / Failure Rate / 客訴即時監控系統，異常偵測由 24 小時縮短至 10 分鐘內，反應效率提升 ↑99%</li>
+              <li data-i18n="exp.1.b4">負責內部數位產品 Discovery → PRD → MVP Launch 全流程，最快 3 週完成 MVP 上線，開發週期縮短 75%</li>
+              <li data-i18n="exp.1.b5">建立部門預算控管與成本分析自動化 Pipeline，月結分析工時由 2.5 小時縮短至 25 秒，效率提升 ↑99%</li>
+              <li data-i18n="exp.1.b7">跨廠區人力與費用管理優化，UPPH 由 0.14 → 0.27，檢驗效率 ↑93%；Q COST 費用占營收比由 2.86% 降至 2.53%，改善 ↓11.5%（0.33pp）</li>
+              <li data-i18n="exp.1.b8">支援中國／越南／日本據點品質系統導入與客戶稽核，建立標準化流程與教育訓練機制</li>
+            </ul>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-period" data-i18n="exp.2.period">NOV 2020 – JAN 2021</div>
+            <h4 class="timeline-role" data-i18n="exp.2.role">總監助理｜營運分析 / 專案協調 / 高階管理支援</h4>
+            <div class="timeline-company" data-i18n="exp.2.company">勝醫生物科技股份有限公司</div>
+            <ul class="timeline-bullets">
+              <li data-i18n="exp.2.b1">協助產品上市時程規劃與跨部門進度追蹤，確保新產品導入符合市場與營運時程</li>
+              <li data-i18n="exp.2.b2">彙整月度財務與營運報表，提供管理層決策分析依據與經營績效追蹤</li>
+            </ul>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-period" data-i18n="exp.3.period">NOV 2019 – OCT 2020</div>
+            <h4 class="timeline-role" data-i18n="exp.3.role">國外業務專員｜海外供應鏈協調 / 成本分析 / 客戶專案管理</h4>
+            <div class="timeline-company" data-i18n="exp.3.company">香港商耀進股份有限公司</div>
+            <ul class="timeline-bullets">
+              <li data-i18n="exp.3.b1">協調海外工廠生產排程與訂單交期管理，確保客製化專案如期交付</li>
+              <li data-i18n="exp.3.b2">整合製造成本、交期與供應風險資訊，支援業務報價與客戶專案決策</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Education -->
+      <div class="about-block">
+        <h3 class="about-subhead" data-i18n="about.eduHead">EDUCATION</h3>
+        <div class="edu-grid">
+          <div class="edu-card">
+            <div class="edu-degree" data-i18n="edu.1.degree">財務金融系 碩士</div>
+            <div class="edu-school" data-i18n="edu.1.school">國立雲林科技大學</div>
+            <div class="edu-meta">Feb 2021 – Feb 2023 · GPA 3.32/4.0</div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-degree" data-i18n="edu.2.degree">國際商務學系（輔修：應用外語）</div>
+            <div class="edu-school" data-i18n="edu.2.school">義守大學</div>
+            <div class="edu-meta">Sep 2015 – Jun 2019</div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-degree" data-i18n="edu.3.degree">國際貿易學系 交換生</div>
+            <div class="edu-school" data-i18n="edu.3.school">南京大學</div>
+            <div class="edu-meta">Jan 2019 – Jul 2019</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="about-block">
+        <h3 class="about-subhead" data-i18n="about.certHead">CERTIFICATIONS</h3>
+        <div class="cert-grid">
+          <div class="cert-card">
+            <div class="cert-badge">✓</div>
+            <div>
+              <div class="cert-name">VDA 6.3 Internal Auditor Training</div>
+              <div class="cert-year">2023</div>
+            </div>
+          </div>
+          <div class="cert-card">
+            <div class="cert-badge">✓</div>
+            <div>
+              <div class="cert-name">QC080000 Green Product Management</div>
+              <div class="cert-year">2024</div>
+            </div>
+          </div>
+          <div class="cert-card">
+            <div class="cert-badge">✓</div>
+            <div>
+              <div class="cert-name">Google Analytics Certification</div>
+              <div class="cert-year">2026</div>
+            </div>
+          </div>
+          <div class="cert-card">
+            <div class="cert-badge">✓</div>
+            <div>
+              <div class="cert-name">TOEIC 730</div>
+              <div class="cert-year" data-i18n="cert.toeic.label">English Proficiency</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strengths -->
+      <div class="about-block">
+        <h3 class="about-subhead" data-i18n="about.strengthHead">STRENGTHS</h3>
+        <div class="strength-tags">
+          <span class="strength-tag" data-i18n="strength.1">跨部門溝通協調</span>
+          <span class="strength-tag" data-i18n="strength.5">流程標準化能力</span>
+          <span class="strength-tag" data-i18n="strength.2">數據驅動決策</span>
+          <span class="strength-tag" data-i18n="strength.3">從 0→1 產品落地</span>
+          <span class="strength-tag" data-i18n="strength.6">快速 MVP 開發</span>
+          <span class="strength-tag" data-i18n="strength.4">AI 工具整合</span>
+          <span class="strength-tag" data-i18n="strength.7">內部數位化講師</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section id="work">
+    <div class="container">
+      <div class="section-label" data-i18n="work.label">WORK</div>
+      <h2 class="section-title" data-i18n="work.title">作品集</h2>
+      <div class="work-grid" id="workGrid">
+        <!-- Cards populated by JS from PROJECTS array (Task 8) -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" id="modal" role="document">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <h3 id="modalTitle"></h3>
+      <div class="modal-subtitle" id="modalSubtitle"></div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-section">
+        <div class="modal-section-label" data-i18n="modal.bg">BACKGROUND</div>
+        <div class="modal-section-body" id="modalBg"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label" data-i18n="modal.role">ROLE</div>
+        <div class="modal-section-body" id="modalRole"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label" data-i18n="modal.exec">EXECUTION</div>
+        <div class="modal-section-body" id="modalExec"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label" data-i18n="modal.result">RESULTS</div>
+        <div class="modal-result-box" id="modalResult"></div>
+      </div>
+    </div>
+  </div>
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-label" data-i18n="contact.label">CONTACT</div>
+      <h2 class="section-title" data-i18n="contact.title">聯絡方式</h2>
+      <p class="contact-intro" data-i18n="contact.intro">歡迎進一步聊聊。職缺討論、合作邀請、產業交流都歡迎來信或來電。</p>
+      <div class="contact-buttons">
+        <a href="mailto:tree12077@gmail.com" class="contact-btn">
+          <div class="contact-icon">✉</div>
+          <div>
+            <div class="contact-label" data-i18n="contact.emailLabel">EMAIL</div>
+            <div class="contact-value">tree12077@gmail.com</div>
+          </div>
+        </a>
+        <a href="tel:+886929961207" class="contact-btn">
+          <div class="contact-icon">☎</div>
+          <div>
+            <div class="contact-label" data-i18n="contact.phoneLabel">PHONE</div>
+            <div class="contact-value">+886 929-961-207</div>
+          </div>
+        </a>
+      </div>
+      <div class="contact-location">
+        <span>📍</span><span data-i18n="contact.location">Tainan, Taiwan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      © 2026 Hailey Huang  ·  Built with HTML + <span class="footer-heart">♥</span>
+    </div>
+  </footer>
+
+  <script>
+    // ===================== Nav scroll behavior =====================
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 80) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }, { passive: true });
+
+    // ===================== Mobile menu =====================
+    const hamburger = document.getElementById('navHamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    // Close mobile menu when clicking a link
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // ===================== Placeholders for Task 4 (i18n) and Task 10 (animations) =====================
+    // ===================== i18n =====================
+    const I18N = {
+      zh: {
+        'nav.brand': 'Hailey<span>.</span>',
+        'nav.home': '首頁',
+        'nav.about': '關於',
+        'nav.work': '作品',
+        'nav.contact': '聯絡',
+        'nav.lang': 'EN',
+
+        'about.label': 'ABOUT',
+        'about.title': '關於我',
+
+        'work.label': 'WORK',
+        'work.title': '作品集',
+
+        'contact.label': 'CONTACT',
+        'contact.title': '聯絡方式',
+        'modal.bg': '背景',
+        'modal.role': '角色',
+        'modal.exec': '執行內容',
+        'modal.result': '成果',
+        'contact.intro': '歡迎進一步聊聊。職缺討論、合作邀請、產業交流都歡迎來信或來電。',
+        'contact.emailLabel': 'EMAIL',
+        'contact.phoneLabel': 'PHONE',
+        'contact.location': 'Tainan, Taiwan',
+        'hero.tagline': 'TECHNICAL PROJECT MANAGEMENT · AI AUTOMATION',
+        'hero.title': '把痛點<br>變成<em>產品</em>。',
+        'hero.subtitle': 'Hailey Huang · 黃芝穎',
+        'hero.desc': '統籌跨海外工廠製造測試軟體與專案管理，擅長把營運痛點轉成可規模化的數位產品與 AI／自動化解決方案。',
+        'hero.kpi1': '數位化專案',
+        'hero.kpi2': '月結效率',
+        'hero.kpi3': '開發週期',
+        'hero.cta1': '看作品 →',
+
+        'skill.data': '數據分析',
+        'skill.automation': '流程自動化',
+        'skill.code': '程式開發',
+        'skill.ai': 'AI 應用',
+        'skill.product': '產品 / Low-Code',
+        'skill.collab': '協作平台',
+
+        'about.profile': '現任緯穎科技技術專案經理（TPM），負責跨海外工廠製造測試軟體與測試平台專案，協調研發、生產、品質等跨職能團隊推動專案落地。此前累積 3 年企業數位化與內部產品開發經驗，擅長從需求訪談、流程設計、MVP 快速開發到導入落地與持續迭代。熟悉 Power Automate、Power BI、Python 與 Claude Code，具備以 AI 與數據驅動流程自動化與決策優化之實務經驗，並曾擔任內部數位化講師，推動跨部門 BI 與 AI 工具導入。',
+        'about.expHead': 'EXPERIENCE',
+        'about.eduHead': 'EDUCATION',
+        'about.certHead': 'CERTIFICATIONS',
+        'about.strengthHead': 'STRENGTHS',
+
+        'cert.toeic.label': '英文能力',
+
+        'exp.0.period': 'AUG 2026 – PRESENT',
+        'exp.0.role': '技術專案經理 TPM｜製造測試軟體 / 測試平台專案管理 / AI 驅動流程自動化',
+        'exp.0.company': '緯穎科技 Wiwynn',
+        'exp.0.b1': '主導跨海外工廠製造測試軟體與測試平台專案之規劃與執行，涵蓋開發至量產全階段，確保里程碑與交付項目如期達成',
+        'exp.0.b2': '協調 SW Test Engineering / Production / Design Engineering / Quality / Operations 等 5 大跨職能團隊，定義專案範疇、時程與交付標準',
+        'exp.0.b3': '推動測試流程 CT（Cycle Time）優化與自動化工作流程設計，降低人工作業負擔，提升測試效率與產線產出',
+        'exp.0.b4': '建立結構化風險追蹤與議題管理機制，推動優先級排序與問題收斂；持續優化專案管理流程，提升執行效率與透明度',
+
+        'exp.1.period': 'JUL 2023 – JUL 2026',
+        'exp.1.role': '專案工程師｜數位轉型 / 部門運營 / 內部產品開發',
+        'exp.1.company': '馳諾瓦科技（飛宏科技子公司）',
+        'exp.1.b1': '主導企業 AI／Automation 解決方案落地，完成 10+ 項數位化專案，降低重複性人工流程',
+        'exp.1.b2': '建置跨廠區品質數據平台，整合 3 座工廠 / 100+ 使用者 KPI 與報表流程，效率提升 ↑80%',
+        'exp.1.b3': '打造 FPYR / Failure Rate / 客訴即時監控系統，異常偵測由 24 小時縮短至 10 分鐘內，反應效率提升 ↑99%',
+        'exp.1.b4': '負責內部數位產品 Discovery → PRD → MVP Launch 全流程，最快 3 週完成 MVP 上線，開發週期縮短 75%',
+        'exp.1.b5': '建立部門預算控管與成本分析自動化 Pipeline，月結分析工時由 2.5 小時縮短至 25 秒，效率提升 ↑99%',
+        'exp.1.b7': '跨廠區人力與費用管理優化，UPPH 由 0.14 → 0.27，檢驗效率 ↑93%；Q COST 費用占營收比由 2.86% 降至 2.53%，改善 ↓11.5%（0.33pp）',
+        'exp.1.b8': '支援中國／越南／日本據點品質系統導入與客戶稽核，建立標準化流程與教育訓練機制',
+
+        'exp.2.period': 'NOV 2020 – JAN 2021',
+        'exp.2.role': '總監助理｜營運分析 / 專案協調 / 高階管理支援',
+        'exp.2.company': '勝醫生物科技股份有限公司',
+        'exp.2.b1': '協助產品上市時程規劃與跨部門進度追蹤，確保新產品導入符合市場與營運時程',
+        'exp.2.b2': '彙整月度財務與營運報表，提供管理層決策分析依據與經營績效追蹤',
+
+        'exp.3.period': 'NOV 2019 – OCT 2020',
+        'exp.3.role': '國外業務專員｜海外供應鏈協調 / 成本分析 / 客戶專案管理',
+        'exp.3.company': '香港商耀進股份有限公司',
+        'exp.3.b1': '協調海外工廠生產排程與訂單交期管理，確保客製化專案如期交付',
+        'exp.3.b2': '整合製造成本、交期與供應風險資訊，支援業務報價與客戶專案決策',
+
+        'edu.1.degree': '財務金融系 碩士',
+        'edu.1.school': '國立雲林科技大學',
+        'edu.2.degree': '國際商務學系（輔修：應用外語）',
+        'edu.2.school': '義守大學',
+        'edu.3.degree': '國際貿易學系 交換生',
+        'edu.3.school': '南京大學',
+
+        'strength.1': '跨部門溝通協調',
+        'strength.2': '數據驅動決策',
+        'strength.3': '從 0→1 產品落地',
+        'strength.4': 'AI 工具整合',
+        'strength.5': '流程標準化能力',
+        'strength.6': '快速 MVP 開發',
+        'strength.7': '內部數位化講師',
+
+
+        'footer.text': '© 2026 Hailey Huang  ·  Built with HTML +'
+      },
+      en: {
+        'nav.brand': 'Hailey<span>.</span>',
+        'nav.home': 'Home',
+        'nav.about': 'About',
+        'nav.work': 'Work',
+        'nav.contact': 'Contact',
+        'nav.lang': '中',
+
+        'about.label': 'ABOUT',
+        'about.title': 'About Me',
+
+        'work.label': 'WORK',
+        'work.title': 'Selected Work',
+
+        'contact.label': 'CONTACT',
+        'contact.title': 'Get in Touch',
+        'modal.bg': 'BACKGROUND',
+        'modal.role': 'ROLE',
+        'modal.exec': 'EXECUTION',
+        'modal.result': 'RESULTS',
+        'contact.intro': "Let's connect. I welcome job discussions, collaboration invitations, and industry conversations — by email or phone.",
+        'contact.emailLabel': 'EMAIL',
+        'contact.phoneLabel': 'PHONE',
+        'contact.location': 'Tainan, Taiwan',
+        'hero.tagline': 'TECHNICAL PROJECT MANAGEMENT · AI AUTOMATION',
+        'hero.title': 'Turn pain points<br>into <em>products</em>.',
+        'hero.subtitle': 'Hailey Huang · 黃芝穎',
+        'hero.desc': 'Driving manufacturing test software and project management across overseas manufacturing sites — turning operational pain points into scalable digital products and AI/automation solutions.',
+        'hero.kpi1': 'Digital Projects',
+        'hero.kpi2': 'Close Efficiency',
+        'hero.kpi3': 'Dev Cycle',
+        'hero.cta1': 'View Work →',
+
+        'skill.data': 'Data Analytics',
+        'skill.automation': 'Process Automation',
+        'skill.code': 'Programming',
+        'skill.ai': 'AI Applications',
+        'skill.product': 'Product / Low-Code',
+        'skill.collab': 'Collaboration',
+
+        'about.profile': 'Technical Project Manager (TPM) at Wiwynn, leading manufacturing test software and test platform projects across overseas manufacturing sites, coordinating cross-functional teams including R&D, Production, and Quality to drive project delivery. Previously accumulated 3 years of experience in enterprise digitalization and internal product development, taking projects from discovery and process design through fast MVP development to rollout and iteration. Proficient in Power Automate, Power BI, Python, and Claude Code, with hands-on experience in AI- and data-driven process automation and decision optimization. Also served as an internal digitalization trainer, leading cross-departmental adoption of BI and AI tools.',
+        'about.expHead': 'EXPERIENCE',
+        'about.eduHead': 'EDUCATION',
+        'about.certHead': 'CERTIFICATIONS',
+        'about.strengthHead': 'STRENGTHS',
+
+        'cert.toeic.label': 'English Proficiency',
+
+        'exp.0.period': 'AUG 2026 – PRESENT',
+        'exp.0.role': 'Technical Project Manager (TPM) | Manufacturing Test Software / Test Platform Project Management / AI-Driven Process Automation',
+        'exp.0.company': 'Wiwynn Corporation',
+        'exp.0.b1': 'Lead planning and execution of manufacturing test software and test platform projects across overseas manufacturing sites, from development through production, ensuring milestones and deliverables are met on schedule.',
+        'exp.0.b2': 'Coordinate 5 cross-functional teams (SW Test Engineering, Production, Design Engineering, Quality, Operations) to define project scope, timelines, and delivery standards.',
+        'exp.0.b3': 'Drive test cycle time (CT) optimization and automated workflow design, reducing manual workload and improving test efficiency and production output.',
+        'exp.0.b4': 'Establish structured risk tracking and issue management to drive prioritization and closure; continuously improve project management processes for execution efficiency and transparency.',
+
+        'exp.1.period': 'JUL 2023 – JUL 2026',
+        'exp.1.role': 'Project Engineer | Digital Transformation / Operations / Internal Product Development',
+        'exp.1.company': 'ZEROVA Technologies',
+        'exp.1.b1': 'Led 10+ AI/automation initiatives to improve operational efficiency and reduce manual workflows.',
+        'exp.1.b2': 'Built cross-site quality data platforms for 3 factories and 100+ users, improving KPI/reporting efficiency by 80%.',
+        'exp.1.b3': 'Developed real-time FPYR, failure rate, and complaint monitoring systems, reducing issue detection time from 24 hrs to under 10 mins.',
+        'exp.1.b4': 'Delivered internal digital products from discovery to MVP launch within 3 weeks, reducing development cycles by 75%.',
+        'exp.1.b5': 'Automated budgeting and cost analysis workflows, reducing monthly reporting time from 2.5 hrs to 25 s.',
+        'exp.1.b7': 'Optimized cross-site manpower and cost management, improving UPPH by 93% and reducing Q COST ratio from 2.9% to 2.5% (↓0.33pp).',
+        'exp.1.b8': 'Supported overseas quality system deployment and customer audits across China, Vietnam, and Japan.',
+
+        'exp.2.period': 'NOV 2020 – JAN 2021',
+        'exp.2.role': "Executive Assistant to Director | Operations Analysis / Project Coordination / Executive Support",
+        'exp.2.company': 'SAN YI Biotechnology Co., Ltd.',
+        'exp.2.b1': 'Assisted in product launch timeline planning and cross-departmental progress tracking to ensure new product introduction met market and operational schedules.',
+        'exp.2.b2': 'Consolidated monthly financial and operational reports, providing decision-support analysis and performance tracking for management.',
+
+        'exp.3.period': 'NOV 2019 – OCT 2020',
+        'exp.3.role': 'Overseas Sales Specialist | Overseas Supply Chain / Cost Analysis / Customer Project Management',
+        'exp.3.company': 'Advance Factory Limited',
+        'exp.3.b1': 'Coordinated overseas factory production scheduling and order delivery management to ensure on-time delivery of customized projects.',
+        'exp.3.b2': 'Integrated manufacturing cost, delivery, and supply risk information to support sales quotations and customer project decisions.',
+
+        'edu.1.degree': 'M.S. in Finance',
+        'edu.1.school': 'National Yunlin University of Science and Technology',
+        'edu.2.degree': 'B.A. in International Business (Minor: Applied English)',
+        'edu.2.school': 'I-Shou University',
+        'edu.3.degree': 'Exchange Student, International Trade',
+        'edu.3.school': 'Nanjing University',
+
+        'strength.1': 'Cross-functional Collaboration',
+        'strength.2': 'Data-Driven Decisions',
+        'strength.3': '0→1 Product Delivery',
+        'strength.4': 'AI Tool Integration',
+        'strength.5': 'Process Standardization',
+        'strength.6': 'Rapid MVP Delivery',
+        'strength.7': 'Internal Digital Trainer',
+
+
+        'footer.text': '© 2026 Hailey Huang  ·  Built with HTML +'
+      }
+    };
+
+    // ===================== Projects data (filled in Task 8) =====================
+    const PROJECTS = [
+      // ============ 1. 跨廠區 KPI ============
+      {
+        tech: ['SharePoint', 'Power Automate', 'Base44'],
+        zh: {
+          title: '跨廠區 KPI 管理與績效流程數位化平台',
+          shortResult: '從 <strong>0→1</strong> 上線。月度 KPI 作業由 <strong>3-5 個工作天</strong>縮短至 <strong>即時完成</strong>。',
+          bg: '多廠區 KPI 仍仰賴 Excel 與 email 提報，月度 KPI 彙整需 3-5 個工作天，且資料來源分散、計算邏輯各廠不一致，難以建立統一視角。',
+          role: '從 0→1 主導平台設計與上線，跨團隊推動 IT、運營、品質單位協作。',
+          exec: [
+            '設計統一的 KPI 計算規則與標準化報表',
+            '建置雙階段審核 + 即時排名機制，KPI 填報、審批、追蹤、公告全流程系統化',
+            '實作三語系（中／英／越）介面，支援跨國使用',
+            '串接 SharePoint（資料層）+ Power Automate（工作流程）+ Base44（前端）'
+          ],
+          result: '1 個月完成 MVP 上線；月度 KPI 作業由 3-5 個工作天縮短至即時完成；整合 3 廠 100+ 使用者。'
+        },
+        en: {
+          title: 'Cross-Site KPI Management & Performance Workflow Platform',
+          shortResult: 'Built <strong>0→1</strong>. Monthly KPI cycle reduced from <strong>3-5 business days</strong> to <strong>real-time</strong>.',
+          bg: 'Multi-site KPI reporting depended on Excel and email, requiring 3-5 business days each month, with fragmented data sources and inconsistent calculation logic across sites — making a unified view impossible.',
+          role: 'Owned the platform from 0→1: led design and rollout, driving collaboration across IT, Operations, and Quality teams.',
+          exec: [
+            'Designed unified KPI calculation rules and standardized reporting templates',
+            'Built two-stage approval and real-time ranking — full digital workflow for submission, review, tracking, and announcement',
+            'Implemented tri-lingual UI (ZH / EN / VN) for cross-border use',
+            'Integrated SharePoint (data) + Power Automate (workflow) + Base44 (frontend)'
+          ],
+          result: 'MVP launched in 1 month; monthly KPI cycle reduced from 3-5 business days to real-time; consolidated 3 sites and 100+ users.'
+        }
+      },
+
+      // ============ 2. 客訴風險評分系統 ============
+      {
+        tech: ['Power Automate', 'Lists', 'Power BI', 'Teams'],
+        zh: {
+          title: '客訴風險評分系統',
+          shortResult: '人工整理時間 <strong>↓90%</strong>。週報整理由 <strong>2 小時 → 10 分鐘</strong>。',
+          bg: '客訴案件散落多版本 Excel，缺乏統一風險評估與升級機制，逾期案件無法即時揭露，跨部門協作效率低。',
+          role: '主導從資料整併到 dashboard 與通知流程設計。',
+          exec: [
+            '建置 RPN（Risk Priority Number）風險評分模型，自動分級與優先排序',
+            '設計即期／逾期／高風險升級通知流程，串接 Teams 自動提醒與跨部門升級機制',
+            '導入單一資料源架構，將多版本 Excel 整合至 Microsoft Lists 統一管理',
+            '建立 Power BI 即時追蹤 Dashboard，每日自動刷新案件分責、進度與逾期風險'
+          ],
+          result: '人工整理時間降低 90%；每週報表整理由 2 小時縮短至 10 分鐘。'
+        },
+        en: {
+          title: 'Customer Complaint Risk Scoring System',
+          shortResult: 'Manual effort <strong>↓90%</strong>. Weekly reporting <strong>2 hrs → 10 min</strong>.',
+          bg: 'Complaint cases were scattered across multiple Excel versions with no unified risk evaluation or escalation; overdue cases were invisible in real time, hurting cross-departmental collaboration.',
+          role: 'Led the system end-to-end — from data consolidation to dashboard and notification workflow design.',
+          exec: [
+            'Built an RPN (Risk Priority Number) scoring model with automatic tiering and prioritization',
+            'Designed at-risk / overdue / high-priority escalation flows with Teams alerts and cross-departmental escalation',
+            'Introduced single-source-of-truth architecture, consolidating multi-version Excel into Microsoft Lists',
+            'Deployed Power BI live dashboard, auto-refreshing daily case ownership, progress, and overdue risk'
+          ],
+          result: '90% reduction in manual effort; weekly reporting reduced from 2 hours to 10 minutes.'
+        }
+      },
+
+      // ============ 3. 部門成本分析與報告自動化系統 ============
+      {
+        tech: ['Python', 'OpenPyXL', 'Claude API', 'HTML'],
+        zh: {
+          title: '部門成本分析與報告自動化系統',
+          shortResult: '單次報告由 <strong>2.5 小時 → 25 秒</strong>，節省 <strong>99.7%</strong>。',
+          bg: '月結成本分析需手動撈 Excel、清資料、做圖表、寫摘要，單次需 2.5 小時，3 廠區 5 大部門皆受影響，月結瓶頸明顯。',
+          role: '端到端設計與實作整套 pipeline。',
+          exec: [
+            'Excel 擷取 → 資料清洗 → 預算達成／MoM／YoY／結構分析 全流程串接',
+            '導入 Claude API 自動生成財務洞察摘要，提升管理層閱讀效率與異常判讀速度',
+            '輸出 HTML 互動報表（含圖表、管制帶、執行摘要）',
+            '報表生成後自動透過 SMTP 寄送給對應利害關係人'
+          ],
+          result: '單次報告產出時間由約 2.5 小時降至 25 秒，節省 99.7% 作業時間；覆蓋 3 廠區、5 大部門分析。'
+        },
+        en: {
+          title: 'Department Cost Analysis & Report Automation',
+          shortResult: 'Single report from <strong>2.5 hrs → 25 sec</strong> — <strong>99.7%</strong> saved.',
+          bg: 'Monthly cost analysis required manual Excel extraction, cleansing, charting, and summary writing — 2.5 hours per cycle, across 3 sites and 5 departments. A clear month-end bottleneck.',
+          role: 'Designed and implemented the full pipeline end-to-end.',
+          exec: [
+            'Connected Excel extraction → data cleansing → budget / MoM / YoY / structural analysis',
+            'Integrated Claude API for auto-generated financial insight summaries, accelerating leadership readability and anomaly detection',
+            'Output as interactive HTML reports (charts, control bands, executive summary)',
+            'Auto-delivered to stakeholders via SMTP after generation'
+          ],
+          result: 'Report generation time reduced from ~2.5 hours to 25 seconds — 99.7% time saved; covering 3 sites and 5 departments.'
+        }
+      },
+
+      // ============ 4. 自動化人力預測管理系統 ============
+      {
+        tech: ['Python', 'OpenPyXL', 'SMTP'],
+        zh: {
+          title: '自動化人力預測管理系統',
+          shortResult: '人工分析 <strong>2-4 小時 → 全自動執行</strong>。統一三廠 QC 評估標準。',
+          bg: '跨廠區 QC 人力預測仰賴人工解析生產計畫 PDF + Excel 試算，每次分析 2-4 小時，且三廠標準不一致，影響資源調度精準度。',
+          role: '主導模型設計與系統開發。',
+          exec: [
+            '建置 AI 驅動 QC 人力預測平台，自動解析生產計畫 PDF 並轉為結構化資料',
+            '設計 3×3 預測矩陣模型（3 廠 × 3 QC Function × 3 預測情境），覆蓋 9 大分析維度',
+            '整合 L1 標準工時／L2 實績效率／L3 加班消化量建立多情境預測引擎',
+            'SMTP 自動寄送週度報告給對應主管'
+          ],
+          result: '每次人工分析作業由 2-4 小時降至全自動執行；統一三廠 QC 人力評估標準。'
+        },
+        en: {
+          title: 'Automated Manpower Forecasting System',
+          shortResult: 'Manual analysis <strong>2-4 hrs → fully automated</strong>. Standardized QC across 3 sites.',
+          bg: 'Cross-site QC manpower forecasting depended on manual parsing of production plan PDFs and Excel modeling — 2-4 hours per cycle, with inconsistent standards across the three sites, hurting resource allocation accuracy.',
+          role: 'Led model design and system development.',
+          exec: [
+            'Built an AI-driven QC manpower forecasting platform, auto-parsing production plan PDFs into structured data',
+            'Designed a 3×3 forecast matrix (3 sites × 3 QC functions × 3 scenarios), covering 9 analytical dimensions',
+            'Integrated L1 standard hours / L2 actual efficiency / L3 overtime absorption into a multi-scenario forecast engine',
+            'Weekly automated SMTP report delivery to relevant managers'
+          ],
+          result: 'Reduced from 2-4 hours of manual work per cycle to fully automated execution; standardized QC manpower assessment across 3 sites.'
+        }
+      },
+
+      // ============ 5. OQC Report App ============
+      {
+        tech: ['MES', 'SharePoint', 'Mobile App', 'Graph API'],
+        zh: {
+          title: 'OQC Report App',
+          shortResult: '報告製作 <strong>90-120 分鐘 → 10-15 分鐘</strong>，效率提升 <strong>2-3 倍</strong>。',
+          bg: 'OQC 出貨報告仰賴人工輸入、SOP 對照與影像紀錄分散，單份報告 90-120 分鐘，跨廠區標準不一，品質追溯困難。',
+          role: '主導 App 規格設計與跨系統整合。',
+          exec: [
+            '整合 MES 即時數據、自動擷取檢驗結果',
+            '導入 SOP 比對與影像紀錄機制，建立標準化檢驗流程',
+            '多語系支援（中／英／日／越）',
+            '支援跨廠區標準化部署'
+          ],
+          result: '報告製作時間由 90-120 分鐘縮短至 10-15 分鐘，效率提升 2-3 倍。'
+        },
+        en: {
+          title: 'OQC Report App',
+          shortResult: 'Report time <strong>90-120 min → 10-15 min</strong>, <strong>2-3×</strong> efficiency gain.',
+          bg: 'OQC shipment reports relied on manual entry; SOP cross-checks and image records were scattered — 90-120 minutes per report, with inconsistent standards across sites, making quality traceability difficult.',
+          role: 'Led app spec design and cross-system integration.',
+          exec: [
+            'Integrated MES live data and auto-extracted inspection results',
+            'Built SOP cross-check and image record workflow, standardizing inspection process',
+            'Multi-language support (ZH / EN / JA / VN)',
+            'Standardized cross-site deployment'
+          ],
+          result: 'Report time reduced from 90-120 minutes to 10-15 minutes — 2-3× efficiency gain.'
+        }
+      },
+
+      // ============ 6. 部門與主管滿意度 AI 分析平台 ============
+      {
+        tech: ['Forms', 'SharePoint', 'Power BI', 'NotebookLM'],
+        zh: {
+          title: '部門與主管滿意度 AI 分析平台',
+          shortResult: '跨廠區滿意度調查 <strong>全面數位化 + AI 自動分析</strong>。',
+          bg: '年度部門／主管滿意度調查仰賴人工彙整與分析，無法持續追蹤改善並識別核心問題。',
+          role: '平台設計、AI 分析流程設計。',
+          exec: [
+            'Microsoft Forms 蒐集、SharePoint 整合管理',
+            'Power BI 即時儀表板呈現分析結果',
+            'NotebookLM AI 弱點分析與自動報告生成',
+            '依年度問卷結果，AI 弱點分析後自動調整下一年題目，持續優化'
+          ],
+          result: '跨廠區部門／主管滿意度調查數位化與自動化分析；識別部門和管理核心問題並支援改善決策。'
+        },
+        en: {
+          title: 'Department & Manager Satisfaction AI Analytics Platform',
+          shortResult: 'Cross-site satisfaction surveys <strong>fully digitalized + AI-analyzed</strong>.',
+          bg: 'Annual department/manager satisfaction surveys depended on manual aggregation and analysis, lacking continuous improvement tracking and core issue identification.',
+          role: 'Designed the platform and AI analysis workflow.',
+          exec: [
+            'Microsoft Forms collection, SharePoint consolidation and management',
+            'Power BI live dashboard for analysis results',
+            'NotebookLM AI weakness analysis and automated report generation',
+            'AI-driven annual question refinement based on prior-year results, for continuous improvement'
+          ],
+          result: 'Cross-site department/manager satisfaction surveys fully digitalized and auto-analyzed; identified core department and management issues and supported improvement decisions.'
+        }
+      }
+    ];
+
+    // ===================== Render work cards =====================
+    let renderWork = function(lang) {
+      const grid = document.getElementById('workGrid');
+      grid.innerHTML = PROJECTS.map((p, idx) => {
+        const tt = p[lang];
+        return `
+          <div class="work-card" data-project="${idx}">
+            <h3>${tt.title}</h3>
+            <div class="work-tags">${p.tech.map(t => `<span class="work-tag">${t}</span>`).join('')}</div>
+            <div class="work-result">${tt.shortResult}</div>
+            <div class="work-more">${lang === 'zh' ? '查看細節 →' : 'View details →'}</div>
+          </div>
+        `;
+      }).join('');
+      // Re-bind click handlers
+      grid.querySelectorAll('.work-card').forEach(card => {
+        card.addEventListener('click', () => openModal(parseInt(card.dataset.project)));
+      });
+    }
+
+    // ===================== Modal =====================
+    const backdrop = document.getElementById('modalBackdrop');
+    const modalClose = document.getElementById('modalClose');
+    let prevFocus = null;
+
+    function openModal(idx) {
+      const p = PROJECTS[idx];
+      if (!p) return;
+      const tt = p[currentLang];
+      document.getElementById('modalTitle').textContent = tt.title;
+      document.getElementById('modalSubtitle').textContent = currentLang === 'zh' ? p.en.title : p.zh.title;
+      document.getElementById('modalTags').innerHTML = p.tech.map(t => `<span class="work-tag">${t}</span>`).join('');
+      document.getElementById('modalBg').textContent = tt.bg;
+      document.getElementById('modalRole').textContent = tt.role;
+      document.getElementById('modalExec').innerHTML = `<ul>${tt.exec.map(li => `<li>${li}</li>`).join('')}</ul>`;
+      document.getElementById('modalResult').textContent = tt.result;
+
+      prevFocus = document.activeElement;
+      backdrop.classList.add('open');
+      backdrop.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      modalClose.focus();
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (prevFocus) prevFocus.focus();
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+    });
+
+    let applyI18n = function(lang) {
+      const dict = I18N[lang];
+      if (!dict) return;
+      document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key] !== undefined) {
+          el.innerHTML = dict[key];
+        }
+      });
+      // Update lang toggle button label
+      document.getElementById('langToggle').textContent = dict['nav.lang'];
+      // Update footer (special: has <span> for heart icon, not data-i18n)
+      const footerNode = document.querySelector('.footer .container');
+      if (footerNode && dict['footer.text']) {
+        footerNode.innerHTML = dict['footer.text'] + ' <span class="footer-heart">♥</span>';
+      }
+      try { localStorage.setItem('hh.lang', lang); } catch (e) {}
+    }
+
+    function getInitialLang() {
+      try {
+        const saved = localStorage.getItem('hh.lang');
+        if (saved === 'zh' || saved === 'en') return saved;
+      } catch (e) {}
+      // Default: Chinese
+      return 'zh';
+    }
+
+    // 把 renderWork 接到 applyI18n —— 改寫 applyI18n 讓它同時 re-render cards
+    const _origApplyI18n = applyI18n;
+    applyI18n = function(lang) {
+      _origApplyI18n(lang);
+      renderWork(lang);
+    };
+
+    let currentLang = getInitialLang();
+    applyI18n(currentLang);
+
+    document.getElementById('langToggle').addEventListener('click', () => {
+      currentLang = currentLang === 'zh' ? 'en' : 'zh';
+      applyI18n(currentLang);
+    });
+
+    // ===================== Scroll fade-in animations =====================
+    const FADE_SELECTORS = [
+      '#hero .hero-grid > *',
+      '#hero .hero-skills',
+      '#about .about-block',
+      '#work .work-card',
+      '#contact .contact-intro',
+      '#contact .contact-buttons',
+      '#contact .contact-location',
+      '.section-label',
+      '.section-title'
+    ];
+
+    FADE_SELECTORS.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => el.classList.add('fade-in'));
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+    // Re-apply fade-in to dynamically rendered work cards after language switch
+    const _origRenderWork = renderWork;
+    renderWork = function(lang) {
+      _origRenderWork(lang);
+      document.querySelectorAll('#work .work-card').forEach(el => {
+        el.classList.add('fade-in', 'visible');  // already visible on re-render
+      });
+    };
+    // Initial work cards (first render): add fade-in and let observer handle
+    document.querySelectorAll('#work .work-card').forEach(el => {
+      if (!el.classList.contains('fade-in')) {
+        el.classList.add('fade-in');
+        io.observe(el);
+      }
+    });
+  </script>
+
+</body>
+</html>
